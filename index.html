@@ -4,40 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prossimi Corsi</title>
+
   <style>
+    @font-face {
+      font-family: 'Gotham';
+      src: url('./fonts/Gotham-Book.otf');
+      font-weight: 400;
+    }
+
+    @font-face {
+      font-family: 'Gotham';
+      src: url('./fonts/Gotham-Bold.otf');
+      font-weight: 700;
+    }
+
+    @font-face {
+      font-family: 'Gotham';
+      src: url('./fonts/Gotham-Black.otf');
+      font-weight: 900;
+    }
+
     :root {
-      --bg: #0b0b0b;
-      --panel: rgba(255,255,255,0.06);
-      --panel-border: rgba(255,255,255,0.10);
+      --bg1: #050505;
+      --bg2: #0d0d0d;
+      --panel: rgba(255,255,255,0.045);
+      --panel-border: rgba(255,255,255,0.08);
       --text: #ffffff;
-      --muted: rgba(255,255,255,0.68);
-      --accent: #e30613;
+      --muted: rgba(255,255,255,0.58);
+      --glow: rgba(255,255,255,0.28);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html, body {
-      margin: 0;
       width: 100%;
       height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background: radial-gradient(circle at top left, #1a1a1a 0%, #0b0b0b 45%, #000000 100%);
-      color: var(--text);
       overflow: hidden;
+      font-family: 'Gotham', Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #1a1a1a 0%, #0b0b0b 38%, #040404 100%);
+      color: var(--text);
     }
 
     body {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px;
+      padding: 42px 54px;
     }
 
     .wrap {
       width: 100%;
-      max-width: 1500px;
+      max-width: 1720px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -45,145 +67,216 @@
     }
 
     .header {
-      margin-bottom: 26px;
-      padding-bottom: 14px;
-      position: relative;
+      margin-bottom: 34px;
+      padding-left: 6px;
     }
 
     .eyebrow {
-      font-size: 22px;
-      letter-spacing: 0.35em;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .title {
-      font-size: clamp(42px, 4vw, 72px);
-      font-weight: 800;
-      line-height: 1;
+      font-size: clamp(48px, 4.4vw, 86px);
+      font-weight: 900;
       text-transform: uppercase;
-      margin: 0;
-    }
-
-    .line {
-      width: 180px;
-      height: 6px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), #ff4d57);
-      margin-top: 16px;
-      box-shadow: 0 0 18px rgba(227, 6, 19, 0.45);
-      animation: pulseLine 2.8s ease-in-out infinite;
-    }
-
-    @keyframes pulseLine {
-      0%, 100% { transform: scaleX(1); opacity: 0.9; }
-      50% { transform: scaleX(1.08); opacity: 1; }
+      line-height: 0.95;
+      letter-spacing: -0.03em;
     }
 
     .list {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 18px;
     }
 
     .course {
+      position: relative;
       display: grid;
-      grid-template-columns: 210px 260px 1fr;
+      grid-template-columns: 230px 280px 1fr;
       align-items: center;
-      min-height: 100px;
-      padding: 22px 28px;
-      border-radius: 22px;
-      background: var(--panel);
+      min-height: 108px;
+      padding: 24px 30px;
+      border-radius: 24px;
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.05) 0%,
+        rgba(255,255,255,0.035) 100%
+      );
       border: 1px solid var(--panel-border);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      backdrop-filter: blur(8px);
       opacity: 0;
-      transform: translateY(24px);
-      animation: cardIn 0.75s ease forwards;
+      transform: translateX(-180px);
+      overflow: hidden;
+      animation: slideInCourse 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .course:nth-child(1) { animation-delay: 0.10s; }
-    .course:nth-child(2) { animation-delay: 0.20s; }
-    .course:nth-child(3) { animation-delay: 0.30s; }
-    .course:nth-child(4) { animation-delay: 0.40s; }
-    .course:nth-child(5) { animation-delay: 0.50s; }
+    .course::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: -20px;
+      height: 42px;
+      border-radius: 999px;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255,255,255,0.26) 0%,
+        rgba(255,255,255,0.14) 34%,
+        rgba(255,255,255,0.05) 60%,
+        rgba(255,255,255,0) 100%
+      );
+      filter: blur(12px);
+      opacity: 0;
+      transform: scaleX(0.86);
+      animation: glowAppear 1.25s ease forwards;
+    }
 
-    @keyframes cardIn {
-      to {
+    .course:nth-child(1) {
+      animation-delay: 0.25s;
+    }
+    .course:nth-child(1)::after {
+      animation-delay: 0.55s;
+    }
+
+    .course:nth-child(2) {
+      animation-delay: 1.10s;
+    }
+    .course:nth-child(2)::after {
+      animation-delay: 1.40s;
+    }
+
+    .course:nth-child(3) {
+      animation-delay: 1.95s;
+    }
+    .course:nth-child(3)::after {
+      animation-delay: 2.25s;
+    }
+
+    .course:nth-child(4) {
+      animation-delay: 2.80s;
+    }
+    .course:nth-child(4)::after {
+      animation-delay: 3.10s;
+    }
+
+    .course:nth-child(5) {
+      animation-delay: 3.65s;
+    }
+    .course:nth-child(5)::after {
+      animation-delay: 3.95s;
+    }
+
+    @keyframes slideInCourse {
+      0% {
+        opacity: 0;
+        transform: translateX(-180px);
+      }
+      72% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes glowAppear {
+      0% {
+        opacity: 0;
+        transform: scaleX(0.82);
+      }
+      100% {
+        opacity: 1;
+        transform: scaleX(1);
       }
     }
 
     .time {
-      font-size: clamp(34px, 3vw, 52px);
-      font-weight: 800;
+      font-size: clamp(42px, 3.3vw, 62px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
       color: var(--text);
-      letter-spacing: -0.03em;
+      white-space: nowrap;
     }
 
     .studio {
-      font-size: clamp(22px, 1.8vw, 34px);
-      color: var(--muted);
+      font-size: clamp(22px, 1.75vw, 34px);
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding-left: 18px;
-      border-left: 4px solid rgba(227, 6, 19, 0.9);
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      padding-left: 10px;
+      white-space: nowrap;
     }
 
     .name {
-      font-size: clamp(28px, 2.5vw, 44px);
+      font-size: clamp(30px, 2.55vw, 46px);
       font-weight: 700;
       text-transform: uppercase;
-      padding-left: 20px;
-      line-height: 1.1;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      padding-left: 16px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding-left: 6px;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.32);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
     .empty {
       padding: 28px 30px;
-      border-radius: 22px;
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      font-size: 34px;
-      color: var(--muted);
-    }
-
-    .footer {
-      margin-top: 18px;
-      color: rgba(255,255,255,0.42);
-      font-size: 16px;
-      letter-spacing: 0.06em;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 28px;
+      color: rgba(255,255,255,0.55);
       text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    @media (max-width: 1100px) {
-      .course {
-        grid-template-columns: 170px 210px 1fr;
-        min-height: 90px;
-        padding: 18px 22px;
-      }
-    }
-
-    @media (max-width: 820px) {
+    @media (max-width: 1200px) {
       body {
-        padding: 24px;
+        padding: 28px;
       }
 
+      .course {
+        grid-template-columns: 190px 210px 1fr;
+        min-height: 96px;
+        padding: 20px 24px;
+      }
+    }
+
+    @media (max-width: 900px) {
       .course {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 8px;
+        padding: 22px;
       }
 
       .studio,
       .name {
         padding-left: 0;
-        border-left: none;
       }
 
-      .studio {
-        border-top: 3px solid rgba(227, 6, 19, 0.9);
-        padding-top: 10px;
+      .time,
+      .studio,
+      .name {
+        white-space: normal;
       }
     }
   </style>
@@ -193,45 +286,35 @@
     <div class="header">
       <div class="eyebrow">Virgin Active Brescia</div>
       <h1 class="title">Prossimi corsi</h1>
-      <div class="line"></div>
     </div>
 
     <div id="courseList" class="list"></div>
 
-    <div class="footer" id="footerText">
-      Aggiornamento automatico
-    </div>
+    <div class="footer" id="footerText">Aggiornamento automatico</div>
   </div>
 
   <script>
-    /*
-      QUI METTERAI LA TUA FONTE DATI
-      Esempio:
-      const DATA_URL = "https://tuosito.it/corsi.json";
-    */
     const DATA_URL = "";
 
-    /*
-      FORMATO DATI ATTESO:
-      [
-        { "time": "14:30", "studio": "Studio Active", "name": "Body Pump", "start": "2026-04-08T14:30:00" },
-        { "time": "15:00", "studio": "Grid", "name": "Functional", "start": "2026-04-08T15:00:00" }
-      ]
-
-      Se c'è "start", ordina per data/ora.
-      Se non c'è, usa comunque time/studio/name.
-    */
-
     const demoData = [
-      { time: "14:30", studio: "Studio Active", name: "Body Pump", start: "2026-04-08T14:30:00" },
-      { time: "15:00", studio: "Grid", name: "Functional", start: "2026-04-08T15:00:00" },
-      { time: "15:30", studio: "Studio Yoga", name: "Yoga Flow", start: "2026-04-08T15:30:00" },
-      { time: "16:00", studio: "Cycle", name: "Sprint Ride", start: "2026-04-08T16:00:00" },
-      { time: "16:30", studio: "Piscina", name: "Acquafit", start: "2026-04-08T16:30:00" }
+      { time: "07:30", studio: "Studio Active", name: "Pilates" },
+      { time: "09:00", studio: "Grid", name: "Functional" },
+      { time: "12:30", studio: "Cycle", name: "Sprint Ride" },
+      { time: "18:00", studio: "Studio Yoga", name: "Yoga Flow" },
+      { time: "19:15", studio: "Grid", name: "Tone" }
     ];
 
     const courseList = document.getElementById("courseList");
     const footerText = document.getElementById("footerText");
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
     function normalizeCourses(data) {
       if (!Array.isArray(data)) return [];
@@ -262,24 +345,15 @@
       }
 
       courses.forEach(course => {
-        const card = document.createElement("div");
-        card.className = "course";
-        card.innerHTML = `
+        const item = document.createElement("div");
+        item.className = "course";
+        item.innerHTML = `
           <div class="time">${escapeHtml(course.time)}</div>
           <div class="studio">${escapeHtml(course.studio)}</div>
           <div class="name">${escapeHtml(course.name)}</div>
         `;
-        courseList.appendChild(card);
+        courseList.appendChild(item);
       });
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
     }
 
     async function loadCourses() {
@@ -288,7 +362,7 @@
 
         if (DATA_URL) {
           const response = await fetch(DATA_URL, { cache: "no-store" });
-          if (!response.ok) throw new Error("Errore nel caricamento dati");
+          if (!response.ok) throw new Error("Errore caricamento dati");
           rawData = await response.json();
           footerText.textContent = "Aggiornamento automatico • fonte live";
         } else {
@@ -306,8 +380,6 @@
     }
 
     loadCourses();
-
-    // aggiorna ogni 5 minuti
     setInterval(loadCourses, 5 * 60 * 1000);
   </script>
 </body>
