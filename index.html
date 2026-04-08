@@ -3,384 +3,738 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prossimi Corsi</title>
-
+  <title>Meteo Brescia</title>
   <style>
     @font-face {
       font-family: 'Gotham';
-      src: url('./fonts/Gotham-Book.otf');
+      src: url('./fonts/Gotham-Book.otf') format('opentype');
       font-weight: 400;
+      font-style: normal;
     }
 
     @font-face {
       font-family: 'Gotham';
-      src: url('./fonts/Gotham-Bold.otf');
+      src: url('./fonts/Gotham-Bold.otf') format('opentype');
       font-weight: 700;
+      font-style: normal;
     }
 
     @font-face {
       font-family: 'Gotham';
-      src: url('./fonts/Gotham-Black.otf');
+      src: url('./fonts/Gotham-Black.otf') format('opentype');
       font-weight: 900;
+      font-style: normal;
     }
 
     :root {
-      --bg1: #050505;
-      --bg2: #0d0d0d;
-      --panel: rgba(255,255,255,0.045);
-      --panel-border: rgba(255,255,255,0.08);
-      --text: #ffffff;
-      --muted: rgba(255,255,255,0.58);
-      --glow: rgba(255,255,255,0.28);
+      --font-main: 'Gotham', sans-serif;
+      --text: rgba(255,255,255,.96);
+      --muted: rgba(255,255,255,.72);
+      --line: rgba(255,255,255,.13);
+      --glass: rgba(255,255,255,.10);
+      --glass-strong: rgba(255,255,255,.16);
+      --shadow: 0 22px 60px rgba(0,0,0,.22);
+      --blur: 26px;
+      --radius-xl: 36px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
+      margin: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: 'Gotham', Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, #1a1a1a 0%, #0b0b0b 38%, #040404 100%);
+      font-family: var(--font-main);
       color: var(--text);
+      background: #091321;
     }
 
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 42px 54px;
+      letter-spacing: -0.01em;
     }
 
-    .wrap {
-      width: 100%;
-      max-width: 1720px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .header {
-      margin-bottom: 34px;
-      padding-left: 6px;
-    }
-
-    .eyebrow {
-      font-size: 20px;
-      font-weight: 400;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .title {
-      font-size: clamp(48px, 4.4vw, 86px);
-      font-weight: 900;
-      text-transform: uppercase;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-    }
-
-    .list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    .course {
+    .scene {
       position: relative;
-      display: grid;
-      grid-template-columns: 230px 280px 1fr;
-      align-items: center;
-      min-height: 108px;
-      padding: 24px 30px;
-      border-radius: 24px;
-      background: linear-gradient(
-        180deg,
-        rgba(255,255,255,0.05) 0%,
-        rgba(255,255,255,0.035) 100%
-      );
-      border: 1px solid var(--panel-border);
-      box-shadow:
-        0 18px 40px rgba(0,0,0,0.28),
-        inset 0 1px 0 rgba(255,255,255,0.04);
-      backdrop-filter: blur(8px);
-      opacity: 0;
-      transform: translateX(-180px);
+      width: 100%;
+      height: 100%;
       overflow: hidden;
-      animation: slideInCourse 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,.14), transparent 28%),
+        linear-gradient(180deg, #4eb9ff 0%, #7ecfff 20%, #9ddcff 40%, #cae9ff 58%, #f7c089 76%, #ff9e66 88%, #24385f 100%);
+      transition: background 1.4s ease;
     }
 
-    .course::after {
+    .scene.day {
+      background:
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,.16), transparent 26%),
+        linear-gradient(180deg, #58beff 0%, #84d4ff 24%, #aee3ff 46%, #d7efff 62%, #f0d0ac 80%, #f4aa75 90%, #32456d 100%);
+    }
+
+    .scene.sunset {
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255,235,190,.22), transparent 22%),
+        linear-gradient(180deg, #486cb4 0%, #7b85d7 24%, #ffb47f 56%, #ff8c68 72%, #56326c 100%);
+    }
+
+    .scene.night {
+      background:
+        radial-gradient(circle at 52% 14%, rgba(171,202,255,.08), transparent 24%),
+        linear-gradient(180deg, #06101e 0%, #0b1a33 36%, #12274a 64%, #1e2c58 100%);
+    }
+
+    .layer, .sky-glow, .sun, .moon, .stars, .shooting-stars, .haze, .mist, .clouds-back, .clouds-front, .aurora {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .sky-glow::before {
       content: "";
       position: absolute;
-      left: 8%;
-      right: 8%;
-      bottom: -20px;
-      height: 42px;
-      border-radius: 999px;
-      background: radial-gradient(
-        ellipse at center,
-        rgba(255,255,255,0.26) 0%,
-        rgba(255,255,255,0.14) 34%,
-        rgba(255,255,255,0.05) 60%,
-        rgba(255,255,255,0) 100%
-      );
-      filter: blur(12px);
+      width: 58vmax;
+      height: 58vmax;
+      left: 50%;
+      top: -19vmax;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.24) 0%, rgba(255,255,255,.10) 25%, rgba(255,255,255,0) 65%);
+      filter: blur(18px);
+      opacity: .75;
+    }
+
+    .sun::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      transform: translateX(-50%);
+      width: clamp(110px, 12vw, 200px);
+      height: clamp(110px, 12vw, 200px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,248,218,.98) 0%, rgba(255,222,155,.92) 35%, rgba(255,190,115,.38) 60%, rgba(255,190,115,0) 72%);
+      box-shadow: 0 0 90px rgba(255,220,150,.4);
+      transition: opacity 1s ease, transform 1s ease;
+      opacity: .95;
+    }
+
+    .scene.night .sun::before {
       opacity: 0;
-      transform: scaleX(0.86);
-      animation: glowAppear 1.25s ease forwards;
+      transform: translateX(-50%) translateY(-24px) scale(.84);
     }
 
-    .course:nth-child(1) {
-      animation-delay: 0.25s;
-    }
-    .course:nth-child(1)::after {
-      animation-delay: 0.55s;
+    .scene.sunset .sun::before {
+      top: 15%;
+      opacity: .88;
     }
 
-    .course:nth-child(2) {
-      animation-delay: 1.10s;
-    }
-    .course:nth-child(2)::after {
-      animation-delay: 1.40s;
-    }
-
-    .course:nth-child(3) {
-      animation-delay: 1.95s;
-    }
-    .course:nth-child(3)::after {
-      animation-delay: 2.25s;
-    }
-
-    .course:nth-child(4) {
-      animation-delay: 2.80s;
-    }
-    .course:nth-child(4)::after {
-      animation-delay: 3.10s;
+    .moon::before {
+      content: "";
+      position: absolute;
+      left: 73%;
+      top: 12%;
+      width: clamp(76px, 9vw, 135px);
+      height: clamp(76px, 9vw, 135px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 34%, rgba(255,255,255,.95), rgba(220,232,255,.88) 42%, rgba(164,190,244,.25) 64%, rgba(0,0,0,0) 74%);
+      box-shadow: 0 0 72px rgba(180,206,255,.20);
+      opacity: 0;
+      transition: opacity 1s ease;
     }
 
-    .course:nth-child(5) {
-      animation-delay: 3.65s;
-    }
-    .course:nth-child(5)::after {
-      animation-delay: 3.95s;
+    .scene.night .moon::before {
+      opacity: 1;
     }
 
-    @keyframes slideInCourse {
-      0% {
-        opacity: 0;
-        transform: translateX(-180px);
-      }
-      72% {
-        opacity: 1;
-        transform: translateX(10px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .aurora {
+      opacity: 0;
+      transition: opacity 1s ease;
     }
 
-    @keyframes glowAppear {
-      0% {
-        opacity: 0;
-        transform: scaleX(0.82);
-      }
-      100% {
-        opacity: 1;
-        transform: scaleX(1);
-      }
+    .aurora::before,
+    .aurora::after {
+      content: "";
+      position: absolute;
+      width: 52vw;
+      height: 22vw;
+      border-radius: 50%;
+      filter: blur(26px);
+      mix-blend-mode: screen;
+      opacity: .42;
+      animation: auroraFloat 9s ease-in-out infinite alternate;
     }
 
-    .time {
-      font-size: clamp(42px, 3.3vw, 62px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      color: var(--text);
-      white-space: nowrap;
+    .aurora::before {
+      left: 6%;
+      top: 4%;
+      background: radial-gradient(circle, rgba(86,255,191,.25) 0%, rgba(86,255,191,.08) 38%, rgba(86,255,191,0) 70%);
     }
 
-    .studio {
-      font-size: clamp(22px, 1.75vw, 34px);
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      padding-left: 10px;
-      white-space: nowrap;
+    .aurora::after {
+      right: 8%;
+      top: 14%;
+      background: radial-gradient(circle, rgba(100,169,255,.22) 0%, rgba(100,169,255,.08) 38%, rgba(100,169,255,0) 70%);
+      animation-duration: 11s;
     }
 
-    .name {
-      font-size: clamp(30px, 2.55vw, 46px);
+    .scene.night .aurora {
+      opacity: 1;
+    }
+
+    @keyframes auroraFloat {
+      from { transform: translateY(-1.5%) translateX(-1%); }
+      to { transform: translateY(2%) translateX(1.2%); }
+    }
+
+    .stars::before,
+    .stars::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+      background-image:
+        radial-gradient(circle at 8% 20%, rgba(255,255,255,.95) 0 1.4px, transparent 1.8px),
+        radial-gradient(circle at 18% 10%, rgba(255,255,255,.9) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 28% 17%, rgba(255,255,255,.82) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 39% 8%, rgba(255,255,255,.95) 0 1.3px, transparent 1.8px),
+        radial-gradient(circle at 54% 14%, rgba(255,255,255,.9) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 67% 26%, rgba(255,255,255,.76) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 78% 11%, rgba(255,255,255,.96) 0 1.45px, transparent 1.9px),
+        radial-gradient(circle at 88% 19%, rgba(255,255,255,.88) 0 1.15px, transparent 1.7px),
+        radial-gradient(circle at 12% 34%, rgba(255,255,255,.8) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 33% 30%, rgba(255,255,255,.93) 0 1.35px, transparent 1.8px),
+        radial-gradient(circle at 52% 32%, rgba(255,255,255,.9) 0 1.15px, transparent 1.7px),
+        radial-gradient(circle at 81% 36%, rgba(255,255,255,.84) 0 1.1px, transparent 1.6px);
+    }
+
+    .stars::after {
+      animation: twinkle 5.5s ease-in-out infinite alternate;
+    }
+
+    .scene.night .stars::before,
+    .scene.night .stars::after {
+      opacity: 1;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: .62; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.01); }
+      100% { opacity: .72; transform: scale(1); }
+    }
+
+    .shooting-stars span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 999px;
+      background: white;
+      opacity: 0;
+      box-shadow: 0 0 12px rgba(255,255,255,.95), -92px 28px 28px rgba(255,255,255,.15);
+    }
+
+    .scene.night .shooting-stars span:nth-child(1) { top: 13%; left: 69%; animation: shoot 8s linear infinite 1s; }
+    .scene.night .shooting-stars span:nth-child(2) { top: 22%; left: 18%; animation: shoot 10s linear infinite 4.8s; }
+    .scene.night .shooting-stars span:nth-child(3) { top: 9%; left: 44%; animation: shoot 11s linear infinite 7.1s; }
+
+    @keyframes shoot {
+      0%, 78% { opacity: 0; transform: translate(0,0) rotate(-28deg) scale(1); }
+      80% { opacity: 1; }
+      90% { opacity: .95; transform: translate(180px, 90px) rotate(-28deg) scale(1.05); }
+      100% { opacity: 0; transform: translate(240px, 120px) rotate(-28deg) scale(.9); }
+    }
+
+    .clouds-back span,
+    .clouds-front span {
+      position: absolute;
+      display: block;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.92) 0%, rgba(255,255,255,.78) 36%, rgba(255,255,255,.42) 62%, rgba(255,255,255,0) 80%);
+      filter: blur(14px);
+      mix-blend-mode: screen;
+      animation: drift linear infinite;
+    }
+
+    .clouds-back span:nth-child(1) { width: 28vw; height: 11vw; top: 14%; left: -14vw; animation-duration: 68s; opacity: .56; }
+    .clouds-back span:nth-child(2) { width: 21vw; height: 8vw; top: 26%; left: 35vw; animation-duration: 84s; animation-delay: -18s; opacity: .42; }
+    .clouds-back span:nth-child(3) { width: 26vw; height: 10vw; top: 9%; left: 72vw; animation-duration: 76s; animation-delay: -42s; opacity: .48; }
+
+    .clouds-front span:nth-child(1) { width: 34vw; height: 13vw; top: 58%; left: -18vw; animation-duration: 54s; opacity: .42; }
+    .clouds-front span:nth-child(2) { width: 27vw; height: 10vw; top: 65%; left: 24vw; animation-duration: 61s; animation-delay: -22s; opacity: .34; }
+    .clouds-front span:nth-child(3) { width: 39vw; height: 15vw; top: 55%; left: 72vw; animation-duration: 66s; animation-delay: -10s; opacity: .40; }
+
+    .scene.night .clouds-back span,
+    .scene.night .clouds-front span {
+      opacity: .26;
+    }
+
+    .scene.sunset .clouds-back span,
+    .scene.sunset .clouds-front span {
+      opacity: .46;
+    }
+
+    @keyframes drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(120vw); }
+    }
+
+    .haze::before,
+    .haze::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -8% -10%;
+      height: 34%;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.08) 46%, rgba(255,255,255,.15) 100%);
+      filter: blur(26px);
+      opacity: .72;
+    }
+
+    .haze::after {
+      bottom: 18%;
+      height: 22%;
+      opacity: .22;
+    }
+
+    .mist {
+      bottom: -4%;
+      top: auto;
+      height: 28%;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.08) 36%, rgba(255,255,255,.18) 100%);
+      filter: blur(24px);
+      opacity: .46;
+      animation: mistMove 13s ease-in-out infinite alternate;
+    }
+
+    @keyframes mistMove {
+      from { transform: translateX(-1.4%); }
+      to { transform: translateX(1.4%); }
+    }
+
+    .layout {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      height: 100%;
+      padding: clamp(22px, 3vw, 34px);
+      display: grid;
+      gap: clamp(16px, 2vw, 24px);
+      grid-template-columns: 1.15fr .85fr;
+      align-items: stretch;
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.08));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--blur)) saturate(135%);
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(135%);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), transparent 28%);
+      pointer-events: none;
+    }
+
+    .current {
+      padding: clamp(24px, 3vw, 40px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .meta-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .location-block {
+      min-width: 0;
+    }
+
+    .location {
+      font-size: clamp(24px, 2.1vw, 34px);
       font-weight: 700;
-      text-transform: uppercase;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      padding-left: 16px;
+      line-height: 1;
     }
 
-    .footer {
-      margin-top: 20px;
-      padding-left: 6px;
-      font-size: 15px;
+    .date-time {
+      margin-top: 10px;
+      font-size: clamp(14px, 1.1vw, 18px);
+      color: var(--muted);
       font-weight: 400;
-      color: rgba(255,255,255,0.32);
+    }
+
+    .current-icon {
+      width: clamp(70px, 8vw, 110px);
+      height: clamp(70px, 8vw, 110px);
+      flex: 0 0 auto;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.14));
+    }
+
+    .status {
+      margin-top: 8px;
+      font-size: clamp(18px, 1.8vw, 30px);
+      color: rgba(255,255,255,.88);
+      font-weight: 400;
+    }
+
+    .temp-block {
+      margin: auto 0;
+      padding: clamp(8px, 1.4vw, 18px) 0;
+    }
+
+    .temperature {
+      font-size: clamp(96px, 12vw, 180px);
+      line-height: .88;
+      letter-spacing: -0.08em;
+      font-weight: 400;
+      text-shadow: 0 4px 18px rgba(0,0,0,.10);
+    }
+
+    .subline {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.15vw, 20px);
+    }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .chip {
+      padding: 15px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .chip-label {
+      color: var(--muted);
+      font-size: clamp(11px, .9vw, 14px);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: .08em;
+      font-weight: 700;
     }
 
-    .empty {
-      padding: 28px 30px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 28px;
-      color: rgba(255,255,255,0.55);
+    .chip-value {
+      margin-top: 6px;
+      font-size: clamp(18px, 1.5vw, 28px);
+      font-weight: 700;
+    }
+
+    .forecast {
+      padding: clamp(20px, 2.4vw, 30px);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .forecast-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .forecast-title h2 {
+      margin: 0;
+      font-size: clamp(18px, 1.6vw, 26px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-note {
+      color: var(--muted);
+      font-size: clamp(12px, .92vw, 14px);
+      font-weight: 400;
+    }
+
+    .table {
+      display: grid;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 64px 1fr .6fr .6fr;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .row.header {
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-size: 12px;
+      letter-spacing: .08em;
+      font-weight: 700;
     }
 
-    @media (max-width: 1200px) {
-      body {
-        padding: 28px;
-      }
-
-      .course {
-        grid-template-columns: 190px 210px 1fr;
-        min-height: 96px;
-        padding: 20px 24px;
-      }
+    .day-name {
+      font-size: clamp(15px, 1.15vw, 20px);
+      font-weight: 700;
     }
 
-    @media (max-width: 900px) {
-      .course {
+    .wx {
+      width: 46px;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wx img,
+    .current-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .condition {
+      font-size: clamp(14px, 1vw, 17px);
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .minmax {
+      text-align: right;
+      font-size: clamp(15px, 1.05vw, 18px);
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: clamp(12px, .92vw, 14px);
+      color: rgba(255,255,255,.58);
+      font-weight: 400;
+    }
+
+    @media (max-aspect-ratio: 1/1) {
+      .layout {
         grid-template-columns: 1fr;
+        grid-template-rows: 1.05fr .95fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr 60px 1fr .6fr .6fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .chips {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr 52px .9fr .5fr .5fr;
         gap: 8px;
-        padding: 22px;
+        padding: 12px;
       }
 
-      .studio,
-      .name {
-        padding-left: 0;
+      .condition {
+        display: none;
       }
 
-      .time,
-      .studio,
-      .name {
-        white-space: normal;
+      .row.header .condition {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="header">
-      <div class="eyebrow">Virgin Active Brescia</div>
-      <h1 class="title">Prossimi corsi</h1>
-    </div>
+  <div class="scene" id="scene">
+    <div class="sky-glow"></div>
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div class="aurora"></div>
+    <div class="stars"></div>
+    <div class="shooting-stars"><span></span><span></span><span></span></div>
+    <div class="clouds-back"><span></span><span></span><span></span></div>
+    <div class="haze"></div>
+    <div class="mist"></div>
+    <div class="clouds-front"><span></span><span></span><span></span></div>
 
-    <div id="courseList" class="list"></div>
+    <main class="layout">
+      <section class="panel current">
+        <div class="meta-top">
+          <div class="location-block">
+            <div class="location" id="location">Brescia</div>
+            <div class="date-time" id="dateTime">Martedì 8 Aprile · 09:30</div>
+            <div class="status" id="status">Parzialmente nuvoloso</div>
+          </div>
+          <div class="current-icon" id="currentIcon"></div>
+        </div>
 
-    <div class="footer" id="footerText">Aggiornamento automatico</div>
+        <div class="temp-block">
+          <div class="temperature" id="temperature">21°</div>
+          <div class="subline">
+            <span id="minMaxNow">H: 24° · L: 14°</span>
+            <span id="precipNow">Pioggia: 10%</span>
+            <span id="feelsLike">Percepita: 22°</span>
+          </div>
+        </div>
+
+        <div class="chips">
+          <div class="chip">
+            <div class="chip-label">Umidità</div>
+            <div class="chip-value" id="humidity">58%</div>
+          </div>
+          <div class="chip">
+            <div class="chip-label">Vento</div>
+            <div class="chip-value" id="wind">9 km/h</div>
+          </div>
+          <div class="chip">
+            <div class="chip-label">Tramonto</div>
+            <div class="chip-value" id="sunset">19:51</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel forecast">
+        <div class="forecast-title">
+          <h2>Previsioni prossimi 5 giorni</h2>
+          <div class="mini-note">Layout adattabile 16:9 e 9:16</div>
+        </div>
+
+        <div class="table" id="forecastTable">
+          <div class="row header">
+            <div>Giorno</div>
+            <div>Icona</div>
+            <div class="condition">Condizione</div>
+            <div class="minmax">Min</div>
+            <div class="minmax">Max</div>
+          </div>
+        </div>
+
+        <div class="footer-note">Versione grafica pronta per GitHub Pages. Quando vuoi, la colleghiamo ai dati meteo reali.</div>
+      </section>
+    </main>
   </div>
 
   <script>
-    const DATA_URL = "";
+    const weatherData = {
+      location: 'Brescia',
+      current: {
+        temp: 21,
+        status: 'Parzialmente nuvoloso',
+        high: 24,
+        low: 14,
+        humidity: 58,
+        wind: 9,
+        precip: 10,
+        sunset: '19:51',
+        feelsLike: 22
+      },
+      forecast: [
+        { day: 'Oggi', label: 'Parzialmente nuvoloso', min: 14, max: 24 },
+        { day: 'Mercoledì', label: 'Soleggiato', min: 15, max: 25 },
+        { day: 'Giovedì', label: 'Nuvoloso', min: 16, max: 22 },
+        { day: 'Venerdì', label: 'Pioggia', min: 13, max: 19 },
+        { day: 'Sabato', label: 'Temporali', min: 12, max: 18 }
+      ]
+    };
 
-    const demoData = [
-      { time: "07:30", studio: "Studio Active", name: "Pilates" },
-      { time: "09:00", studio: "Grid", name: "Functional" },
-      { time: "12:30", studio: "Cycle", name: "Sprint Ride" },
-      { time: "18:00", studio: "Studio Yoga", name: "Yoga Flow" },
-      { time: "19:15", studio: "Grid", name: "Tone" }
-    ];
+    const scene = document.getElementById('scene');
+    const hour = new Date().getHours();
 
-    const courseList = document.getElementById("courseList");
-    const footerText = document.getElementById("footerText");
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    if (hour >= 6 && hour < 19) {
+      scene.classList.add('day');
+    } else if (hour >= 19 && hour < 21) {
+      scene.classList.add('sunset');
+    } else {
+      scene.classList.add('night');
     }
 
-    function normalizeCourses(data) {
-      if (!Array.isArray(data)) return [];
+    const isNight = scene.classList.contains('night');
 
-      return data
-        .map(item => ({
-          time: item.time || "",
-          studio: item.studio || "",
-          name: item.name || "",
-          start: item.start || null
-        }))
-        .filter(item => item.time && item.studio && item.name)
-        .sort((a, b) => {
-          if (a.start && b.start) {
-            return new Date(a.start) - new Date(b.start);
-          }
-          return a.time.localeCompare(b.time);
-        })
-        .slice(0, 5);
+    function icon(type) {
+      return `<img src="./icons/${type}" alt="">`;
     }
 
-    function renderCourses(courses) {
-      courseList.innerHTML = "";
+    function mapWeather(condition, isNightMode = false) {
+      const c = condition.toLowerCase();
 
-      if (!courses.length) {
-        courseList.innerHTML = `<div class="empty">Nessun corso in partenza</div>`;
-        return;
-      }
+      if (c.includes('tempor')) return 'storm.svg';
+      if (c.includes('tuon')) return 'thunder.svg';
+      if (c.includes('neve') || c.includes('ghiaccio') || c.includes('gel')) return 'snow-flake.svg';
+      if (c.includes('pioggia leggera')) return 'light-rain.svg';
+      if (c.includes('piogg')) return 'rain.svg';
+      if (c.includes('parz')) return isNightMode ? 'cloudy-night.svg' : 'partly-cloudy.svg';
+      if (c.includes('nuvol')) return isNightMode ? 'cloudy-night.svg' : 'cloudy.svg';
+      if (c.includes('sereno') || c.includes('sole')) return isNightMode ? 'moon.svg' : 'sun.svg';
 
-      courses.forEach(course => {
-        const item = document.createElement("div");
-        item.className = "course";
-        item.innerHTML = `
-          <div class="time">${escapeHtml(course.time)}</div>
-          <div class="studio">${escapeHtml(course.studio)}</div>
-          <div class="name">${escapeHtml(course.name)}</div>
+      return isNightMode ? 'moon.svg' : 'sun.svg';
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const giorni = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+      const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('dateTime').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]} · ${hh}:${mm}`;
+    }
+
+    function renderWeather() {
+      document.getElementById('location').textContent = weatherData.location;
+      document.getElementById('status').textContent = weatherData.current.status;
+      document.getElementById('temperature').textContent = `${weatherData.current.temp}°`;
+      document.getElementById('minMaxNow').textContent = `H: ${weatherData.current.high}° · L: ${weatherData.current.low}°`;
+      document.getElementById('precipNow').textContent = `Pioggia: ${weatherData.current.precip}%`;
+      document.getElementById('feelsLike').textContent = `Percepita: ${weatherData.current.feelsLike}°`;
+      document.getElementById('humidity').textContent = `${weatherData.current.humidity}%`;
+      document.getElementById('wind').textContent = `${weatherData.current.wind} km/h`;
+      document.getElementById('sunset').textContent = weatherData.current.sunset;
+      document.getElementById('currentIcon').innerHTML = icon(mapWeather(weatherData.current.status, isNight));
+
+      const table = document.getElementById('forecastTable');
+      weatherData.forecast.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+
+        const nightForRow = index === 0 ? isNight : false;
+
+        row.innerHTML = `
+          <div class="day-name">${item.day}</div>
+          <div class="wx">${icon(mapWeather(item.label, nightForRow))}</div>
+          <div class="condition">${item.label}</div>
+          <div class="minmax">${item.min}°</div>
+          <div class="minmax">${item.max}°</div>
         `;
-        courseList.appendChild(item);
+        table.appendChild(row);
       });
     }
 
-    async function loadCourses() {
-      try {
-        let rawData;
-
-        if (DATA_URL) {
-          const response = await fetch(DATA_URL, { cache: "no-store" });
-          if (!response.ok) throw new Error("Errore caricamento dati");
-          rawData = await response.json();
-          footerText.textContent = "Aggiornamento automatico • fonte live";
-        } else {
-          rawData = demoData;
-          footerText.textContent = "Modalità demo";
-        }
-
-        const courses = normalizeCourses(rawData);
-        renderCourses(courses);
-      } catch (error) {
-        console.error(error);
-        renderCourses(normalizeCourses(demoData));
-        footerText.textContent = "Modalità demo • fonte live non raggiungibile";
-      }
-    }
-
-    loadCourses();
-    setInterval(loadCourses, 5 * 60 * 1000);
+    updateClock();
+    renderWeather();
+    setInterval(updateClock, 30000);
   </script>
 </body>
 </html>
