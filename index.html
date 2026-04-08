@@ -14,6 +14,7 @@
       font-weight: 400;
       font-style: normal;
     }
+
     @font-face {
       font-family: 'Gotham';
       src: url('./fonts/Gotham-Bold.otf') format('opentype');
@@ -23,15 +24,16 @@
 
     :root {
       --text: rgba(255,255,255,.98);
-      --muted: rgba(255,255,255,.9);
-      --soft: rgba(255,255,255,.76);
-      --line: rgba(255,255,255,.22);
-      --glass-top: rgba(255,255,255,.17);
-      --glass-bottom: rgba(255,255,255,.11);
-      --glass-border: rgba(255,255,255,.24);
-      --shadow: 0 20px 42px rgba(0,0,0,.17);
-      --blur: 16px;
+      --muted: rgba(255,255,255,.90);
+      --soft: rgba(255,255,255,.74);
+      --glass: rgba(255,255,255,.14);
+      --glass-2: rgba(255,255,255,.09);
+      --glass-border: rgba(255,255,255,.22);
+      --line: rgba(255,255,255,.16);
+      --shadow: 0 20px 50px rgba(0,0,0,.18);
       --radius: 30px;
+      --left-col: 33%;
+      --right-col: 67%;
     }
 
     * { box-sizing: border-box; }
@@ -43,369 +45,252 @@
       overflow: hidden;
       font-family: 'Gotham', sans-serif;
       color: var(--text);
-      background: #2f69be;
+      background: #355f9d;
     }
 
-    body { letter-spacing: -0.015em; }
+    body {
+      letter-spacing: -0.02em;
+    }
 
-    .scene {
+    .app {
       position: relative;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      isolation: isolate;
-      background: linear-gradient(180deg, #1f58ac 0%, #4176bf 38%, #7098cd 70%, #aec7e5 100%);
-      transition: background 1.2s ease;
+      background: #355f9d;
     }
 
-    /* SCENARI */
-    .scene.day-clear {
-      background:
-        radial-gradient(circle at 83% 15%, rgba(255,241,214,.62), rgba(255,241,214,0) 10%),
-        radial-gradient(circle at 88% 88%, rgba(255,210,170,.18), rgba(255,210,170,0) 15%),
-        linear-gradient(180deg, #1f58ac 0%, #4176bf 38%, #7098cd 70%, #aec7e5 100%);
-    }
-    .scene.day-partly {
-      background:
-        radial-gradient(circle at 82% 16%, rgba(255,239,208,.5), rgba(255,239,208,0) 10%),
-        linear-gradient(180deg, #2a67bc 0%, #5588c9 40%, #82a8d4 74%, #bdd3e9 100%);
-    }
-    .scene.day-cloudy {
-      background:
-        radial-gradient(circle at 80% 18%, rgba(255,255,255,.18), rgba(255,255,255,0) 10%),
-        linear-gradient(180deg, #4d73a8 0%, #6f8fba 38%, #94acca 70%, #c4d1df 100%);
-    }
-    .scene.rain {
-      background:
-        linear-gradient(180deg, #435c86 0%, #62799f 36%, #8da0bc 72%, #b8c3d1 100%);
-    }
-    .scene.storm {
-      background:
-        radial-gradient(circle at 84% 18%, rgba(184,202,255,.12), rgba(184,202,255,0) 10%),
-        linear-gradient(180deg, #1f2c45 0%, #344760 35%, #57697e 70%, #8e9aa9 100%);
-    }
-    .scene.sunset {
-      background:
-        radial-gradient(circle at 82% 17%, rgba(255,227,173,.62), rgba(255,227,173,0) 10%),
-        radial-gradient(circle at 90% 85%, rgba(255,160,110,.18), rgba(255,160,110,0) 15%),
-        linear-gradient(180deg, #5b79c2 0%, #8c8ad0 28%, #d59b82 64%, #f0bb8e 100%);
-    }
-    .scene.night-clear {
-      background:
-        radial-gradient(circle at 82% 15%, rgba(171,197,255,.12), rgba(171,197,255,0) 10%),
-        linear-gradient(180deg, #07182f 0%, #0b2548 34%, #183760 68%, #284870 100%);
-    }
-    .scene.night-cloudy {
-      background:
-        linear-gradient(180deg, #102238 0%, #21374f 38%, #425b73 72%, #677b90 100%);
-    }
-
-    .photo-sky,
-    .sun-glow,
-    .light-beam,
-    .clouds-back,
-    .clouds-front,
-    .mist,
-    .stars,
-    .shooting-star,
-    .rain-layer,
-    .flash-layer {
+    .bg,
+    .bg-overlay,
+    .bg-clouds,
+    .bg-fx,
+    .bg-stars,
+    .bg-shooting {
       position: absolute;
       inset: 0;
       pointer-events: none;
     }
 
-    .photo-sky::before,
-    .photo-sky::after {
-      content: "";
-      position: absolute;
-      inset: 0;
+    .bg {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transform: scale(1.03);
+      transition: background-image 0.8s ease, opacity 0.8s ease;
+    }
+
+    .bg-overlay {
+      background:
+        linear-gradient(90deg, rgba(19,35,64,.28) 0%, rgba(19,35,64,.16) 27%, rgba(19,35,64,.06) 55%, rgba(19,35,64,.08) 100%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 22%, rgba(0,0,0,.08) 100%);
+      backdrop-filter: blur(1px);
+    }
+
+    .bg-clouds {
+      opacity: 0;
+      transition: opacity .6s ease;
       mix-blend-mode: screen;
-      transition: opacity 1s ease;
     }
 
-    .photo-sky::before {
-      background:
-        radial-gradient(ellipse at 14% 76%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 26%),
-        radial-gradient(ellipse at 36% 28%, rgba(255,255,255,.11) 0%, rgba(255,255,255,0) 24%),
-        radial-gradient(ellipse at 62% 48%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 22%),
-        radial-gradient(ellipse at 84% 58%, rgba(255,255,255,.15) 0%, rgba(255,255,255,0) 20%),
-        radial-gradient(ellipse at 90% 88%, rgba(255,222,181,.22) 0%, rgba(255,222,181,0) 18%);
-      filter: blur(16px);
-      opacity: .95;
-    }
-
-    .photo-sky::after {
-      background:
-        radial-gradient(ellipse at 20% 38%, rgba(255,255,255,.1) 0%, rgba(255,255,255,0) 22%),
-        linear-gradient(165deg, transparent 44%, rgba(255,255,255,.18) 49%, transparent 54%);
-      opacity: .32;
-      transform: translateX(4%);
-    }
-
-    .sun-glow::before {
-      content: "";
-      position: absolute;
-      right: 7%;
-      top: 8%;
-      width: 20vw;
-      height: 20vw;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,247,227,.96) 0%, rgba(255,230,183,.48) 22%, rgba(255,230,183,.15) 42%, rgba(255,230,183,0) 68%);
-      filter: blur(8px);
-      animation: pulse 12s ease-in-out infinite alternate;
-      opacity: 1;
-      transition: opacity 1s ease;
-    }
-
-    .scene.night-clear .sun-glow::before,
-    .scene.night-cloudy .sun-glow::before {
-      opacity: .12;
-    }
-
-    .light-beam::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(154deg, transparent 44%, rgba(255,255,255,.16) 49%, transparent 53%);
-      opacity: .22;
-      transform: translateX(8%);
-      transition: opacity 1s ease;
-    }
-
-    .scene.rain .light-beam::before,
-    .scene.storm .light-beam::before,
-    .scene.night-clear .light-beam::before,
-    .scene.night-cloudy .light-beam::before {
-      opacity: .05;
-    }
-
-    @keyframes pulse {
-      from { transform: scale(1); opacity: .92; }
-      to { transform: scale(1.05); opacity: 1; }
-    }
-
-    .clouds-back span,
-    .clouds-front span {
+    .bg-clouds span {
       position: absolute;
       display: block;
       border-radius: 999px;
-      background: radial-gradient(circle at 35% 40%, rgba(255,255,255,.9) 0%, rgba(255,255,255,.58) 36%, rgba(255,255,255,.08) 68%, rgba(255,255,255,0) 82%);
-      filter: blur(16px);
-      mix-blend-mode: screen;
+      background: radial-gradient(circle at 35% 40%, rgba(255,255,255,.68) 0%, rgba(255,255,255,.26) 46%, rgba(255,255,255,0) 78%);
+      filter: blur(18px);
       animation: drift linear infinite;
-      transition: opacity 1s ease;
     }
 
-    .clouds-back span:nth-child(1) { width: 35vw; height: 10vw; top: 16%; left: -12vw; animation-duration: 120s; opacity: .2; }
-    .clouds-back span:nth-child(2) { width: 28vw; height: 9vw; top: 44%; left: 24vw; animation-duration: 138s; animation-delay: -22s; opacity: .17; }
-    .clouds-back span:nth-child(3) { width: 36vw; height: 10vw; top: 73%; left: 62vw; animation-duration: 126s; animation-delay: -50s; opacity: .18; }
-
-    .clouds-front span:nth-child(1) { width: 28vw; height: 9vw; top: 24%; left: -8vw; animation-duration: 62s; opacity: .25; }
-    .clouds-front span:nth-child(2) { width: 34vw; height: 10vw; top: 58%; left: 12vw; animation-duration: 72s; animation-delay: -20s; opacity: .22; }
-    .clouds-front span:nth-child(3) { width: 31vw; height: 9vw; top: 82%; left: 68vw; animation-duration: 68s; animation-delay: -34s; opacity: .18; }
-
-    .scene.day-clear .clouds-back span,
-    .scene.day-clear .clouds-front span { opacity: .08; }
-    .scene.day-partly .clouds-back span,
-    .scene.day-partly .clouds-front span { opacity: .18; }
-    .scene.day-cloudy .clouds-back span,
-    .scene.day-cloudy .clouds-front span,
-    .scene.rain .clouds-back span,
-    .scene.rain .clouds-front span,
-    .scene.night-cloudy .clouds-back span,
-    .scene.night-cloudy .clouds-front span { opacity: .28; }
-    .scene.storm .clouds-back span,
-    .scene.storm .clouds-front span { opacity: .32; }
+    .bg-clouds span:nth-child(1) { width: 24vw; height: 7vw; top: 16%; left: -10vw; animation-duration: 70s; }
+    .bg-clouds span:nth-child(2) { width: 18vw; height: 5.5vw; top: 34%; left: 18vw; animation-duration: 82s; animation-delay: -16s; }
+    .bg-clouds span:nth-child(3) { width: 26vw; height: 7.5vw; top: 62%; left: 54vw; animation-duration: 92s; animation-delay: -24s; }
+    .bg-clouds span:nth-child(4) { width: 20vw; height: 6vw; top: 74%; left: -6vw; animation-duration: 78s; animation-delay: -31s; }
 
     @keyframes drift {
       0% { transform: translateX(0); }
       100% { transform: translateX(118vw); }
     }
 
-    .mist {
-      top: auto;
-      bottom: -3%;
-      height: 32%;
-      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.05) 42%, rgba(255,255,255,.16) 100%);
-      filter: blur(24px);
-      animation: mistMove 13s ease-in-out infinite alternate;
-    }
-
-    @keyframes mistMove {
-      from { transform: translateX(-1%); }
-      to { transform: translateX(1%); }
-    }
-
-    .stars {
-      opacity: 0;
-      transition: opacity 1s ease;
-      background-image:
-        radial-gradient(circle at 8% 20%, rgba(255,255,255,.95) 0 1.4px, transparent 1.8px),
-        radial-gradient(circle at 18% 10%, rgba(255,255,255,.9) 0 1.1px, transparent 1.7px),
-        radial-gradient(circle at 28% 17%, rgba(255,255,255,.82) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 39% 8%, rgba(255,255,255,.95) 0 1.3px, transparent 1.8px),
-        radial-gradient(circle at 54% 14%, rgba(255,255,255,.9) 0 1.2px, transparent 1.7px),
-        radial-gradient(circle at 67% 26%, rgba(255,255,255,.76) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 78% 11%, rgba(255,255,255,.96) 0 1.45px, transparent 1.9px),
-        radial-gradient(circle at 88% 19%, rgba(255,255,255,.88) 0 1.15px, transparent 1.7px),
-        radial-gradient(circle at 12% 34%, rgba(255,255,255,.8) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 33% 30%, rgba(255,255,255,.93) 0 1.35px, transparent 1.8px),
-        radial-gradient(circle at 52% 32%, rgba(255,255,255,.9) 0 1.15px, transparent 1.7px),
-        radial-gradient(circle at 81% 36%, rgba(255,255,255,.84) 0 1.1px, transparent 1.6px);
-      animation: twinkle 6s ease-in-out infinite alternate;
-    }
-
-    .scene.night-clear .stars,
-    .scene.night-cloudy .stars {
-      opacity: .8;
-    }
-
-    @keyframes twinkle {
-      0% { opacity: .45; }
-      100% { opacity: .85; }
-    }
-
-    .shooting-star::before {
-      content: "";
+    .bg-fx::before,
+    .bg-fx::after {
+      content: '';
       position: absolute;
-      width: 2px;
-      height: 2px;
-      top: 18%;
-      left: 68%;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 0 10px rgba(255,255,255,.95), -80px 22px 24px rgba(255,255,255,.18);
+      inset: 0;
       opacity: 0;
-      transform: rotate(-28deg);
-      animation: shoot 12s linear infinite;
+      transition: opacity .6s ease;
     }
 
-    .scene:not(.night-clear) .shooting-star::before {
-      display: none;
+    .bg-fx.sunset::before,
+    .bg-fx.sunrise::before {
+      opacity: .45;
+      background: radial-gradient(circle at 80% 18%, rgba(255,223,172,.42), rgba(255,223,172,0) 18%);
+      filter: blur(18px);
+      animation: glow 10s ease-in-out infinite alternate;
     }
 
-    @keyframes shoot {
-      0%, 82% { opacity: 0; transform: translate(0,0) rotate(-28deg); }
-      84% { opacity: 1; }
-      92% { opacity: .95; transform: translate(160px, 80px) rotate(-28deg); }
-      100% { opacity: 0; transform: translate(220px, 110px) rotate(-28deg); }
+    .bg-fx.rain::before {
+      opacity: .26;
+      background: repeating-linear-gradient(100deg, rgba(255,255,255,.13) 0 1px, transparent 1px 16px);
+      animation: rainMove .9s linear infinite;
     }
 
-    .rain-layer {
-      opacity: 0;
-      transition: opacity 1s ease;
-      background-image: linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 70%);
-      overflow: hidden;
+    .bg-fx.storm::before {
+      opacity: .24;
+      background: repeating-linear-gradient(100deg, rgba(255,255,255,.12) 0 1px, transparent 1px 17px);
+      animation: rainMove .85s linear infinite;
     }
 
-    .rain-layer::before {
-      content: "";
-      position: absolute;
-      inset: -10% 0 0 0;
-      background-image: repeating-linear-gradient(
-        100deg,
-        rgba(255,255,255,.12) 0 1px,
-        transparent 1px 18px
-      );
-      opacity: .35;
-      animation: rainMove 0.8s linear infinite;
-    }
-
-    .scene.rain .rain-layer,
-    .scene.storm .rain-layer {
+    .bg-fx.storm::after {
       opacity: 1;
-    }
-
-    @keyframes rainMove {
-      from { transform: translateY(-20px); }
-      to { transform: translateY(20px); }
-    }
-
-    .flash-layer {
-      opacity: 0;
-      background: rgba(220,230,255,.18);
+      background: rgba(210,220,255,0);
       animation: flash 9s linear infinite;
     }
 
-    .scene.storm .flash-layer { opacity: 1; }
-
-    @keyframes flash {
-      0%, 94%, 100% { background: rgba(220,230,255,0); }
-      95% { background: rgba(220,230,255,.15); }
-      96% { background: rgba(220,230,255,0); }
-      97% { background: rgba(220,230,255,.08); }
-      98% { background: rgba(220,230,255,0); }
+    .bg-fx.neve::before {
+      opacity: .22;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(255,255,255,.92) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 26% 38%, rgba(255,255,255,.9) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 44% 22%, rgba(255,255,255,.92) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 62% 30%, rgba(255,255,255,.88) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 80% 18%, rgba(255,255,255,.92) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 90% 46%, rgba(255,255,255,.88) 0 1.5px, transparent 2px);
+      animation: snowMove 10s linear infinite;
     }
 
-    .wrap {
+    @keyframes glow {
+      from { transform: scale(1); }
+      to { transform: scale(1.03); }
+    }
+
+    @keyframes rainMove {
+      from { transform: translateY(-25px); }
+      to { transform: translateY(25px); }
+    }
+
+    @keyframes snowMove {
+      from { transform: translateY(-18px); }
+      to { transform: translateY(18px); }
+    }
+
+    @keyframes flash {
+      0%, 94%, 100% { background: rgba(210,220,255,0); }
+      95% { background: rgba(210,220,255,.12); }
+      96% { background: rgba(210,220,255,0); }
+      97% { background: rgba(210,220,255,.06); }
+      98% { background: rgba(210,220,255,0); }
+    }
+
+    .bg-stars {
+      opacity: 0;
+      transition: opacity .6s ease;
+      background-image:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,.95) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 18% 10%, rgba(255,255,255,.8) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 31% 16%, rgba(255,255,255,.92) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 48% 11%, rgba(255,255,255,.9) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 67% 22%, rgba(255,255,255,.78) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 82% 13%, rgba(255,255,255,.95) 0 1.3px, transparent 1.8px),
+        radial-gradient(circle at 90% 26%, rgba(255,255,255,.85) 0 1.1px, transparent 1.7px);
+      animation: twinkle 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: .38; }
+      to { opacity: .72; }
+    }
+
+    .bg-shooting::before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      top: 20%;
+      left: 72%;
+      border-radius: 50%;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 0 12px rgba(255,255,255,.95), -80px 25px 18px rgba(255,255,255,.22);
+      opacity: 0;
+      transform: rotate(-30deg);
+      animation: shooting 14s linear infinite;
+    }
+
+    @keyframes shooting {
+      0%, 84% { opacity: 0; transform: translate(0,0) rotate(-30deg); }
+      86% { opacity: 1; }
+      93% { opacity: .95; transform: translate(160px, 90px) rotate(-30deg); }
+      100% { opacity: 0; transform: translate(220px, 120px) rotate(-30deg); }
+    }
+
+    .layout {
       position: relative;
       z-index: 2;
       width: 100%;
       height: 100%;
-      padding: 42px 48px;
       display: grid;
-      grid-template-columns: .9fr 1.65fr;
-      gap: 44px;
+      grid-template-columns: var(--left-col) var(--right-col);
+      padding: 50px 56px;
+      gap: 26px;
       align-items: center;
     }
 
     .left {
+      padding-right: 18px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-left: 12px;
       min-width: 0;
     }
 
     .city {
       margin: 0;
-      font-size: clamp(70px, 6.1vw, 108px);
+      font-size: clamp(62px, 5.5vw, 104px);
       line-height: .92;
       font-weight: 700;
-      text-shadow: 0 2px 10px rgba(0,0,0,.12);
+      text-shadow: 0 2px 10px rgba(0,0,0,.18);
     }
 
-    .desc {
+    .condition {
       margin-top: 16px;
-      font-size: clamp(24px, 2vw, 36px);
+      font-size: clamp(22px, 1.9vw, 38px);
       color: var(--muted);
-      text-shadow: 0 2px 8px rgba(0,0,0,.1);
+      text-shadow: 0 2px 8px rgba(0,0,0,.16);
     }
 
     .date {
       margin-top: 10px;
-      font-size: clamp(20px, 1.5vw, 28px);
+      font-size: clamp(18px, 1.35vw, 27px);
       color: var(--soft);
-      text-shadow: 0 2px 8px rgba(0,0,0,.08);
+      text-shadow: 0 2px 8px rgba(0,0,0,.12);
     }
 
     .temp {
-      margin-top: 24px;
-      font-size: clamp(180px, 16vw, 280px);
-      line-height: .8;
+      margin-top: 26px;
+      font-size: clamp(170px, 15vw, 270px);
+      line-height: .82;
       letter-spacing: -0.09em;
       font-weight: 400;
-      text-shadow: 0 4px 18px rgba(0,0,0,.08);
+      text-shadow: 0 4px 18px rgba(0,0,0,.10);
     }
 
     .meta {
       margin-top: 12px;
-      font-size: clamp(24px, 1.9vw, 34px);
+      font-size: clamp(25px, 1.9vw, 36px);
       color: var(--muted);
-      text-shadow: 0 2px 8px rgba(0,0,0,.08);
+      text-shadow: 0 2px 8px rgba(0,0,0,.14);
     }
 
     .meta.small {
       margin-top: 8px;
-      font-size: clamp(22px, 1.65vw, 30px);
+      font-size: clamp(21px, 1.55vw, 29px);
     }
 
-    .astro {
+    .moon-block {
       margin-top: 24px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      max-width: 340px;
     }
 
     .moon-line,
@@ -414,19 +299,20 @@
       align-items: center;
       gap: 16px;
       color: var(--muted);
-      font-size: clamp(22px, 1.75vw, 30px);
+      font-size: clamp(21px, 1.65vw, 30px);
+      text-shadow: 0 2px 8px rgba(0,0,0,.14);
     }
 
     .moon-line img,
     .sun-line img,
-    .hour-item img,
-    .day-row img {
-      filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0,0,0,.08));
+    .hour-col img,
+    .day-icon img {
+      filter: brightness(0) invert(1) drop-shadow(0 3px 8px rgba(0,0,0,.12));
     }
 
     .moon-line img {
-      width: 64px;
-      height: 64px;
+      width: 66px;
+      height: 66px;
       object-fit: contain;
       display: block;
     }
@@ -441,177 +327,183 @@
     .right {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 18px;
       justify-content: center;
       min-width: 0;
     }
 
     .card {
+      width: 100%;
       position: relative;
       overflow: hidden;
       border-radius: var(--radius);
-      background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
       border: 1px solid var(--glass-border);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(var(--blur)) saturate(120%);
-      -webkit-backdrop-filter: blur(var(--blur)) saturate(120%);
+      backdrop-filter: blur(16px) saturate(115%);
+      -webkit-backdrop-filter: blur(16px) saturate(115%);
     }
 
     .card::before {
-      content: "";
+      content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,0) 38%);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,0) 38%);
       pointer-events: none;
     }
 
-    .hour-card {
-      padding: 18px 28px 20px;
-      min-height: 208px;
+    .hours-card {
+      padding: 18px 22px 18px;
     }
 
-    .hour-top,
-    .hour-bottom {
+    .days-card {
+      padding: 18px 22px 18px;
+    }
+
+    .hours-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .hour-col {
       text-align: center;
-      align-items: center;
-    }
-
-    .hour-top {
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      font-size: clamp(20px, 1.5vw, 28px);
-      color: var(--muted);
-    }
-
-    .hour-bottom {
-      padding-top: 14px;
-      gap: 4px;
-    }
-
-    .hour-item {
+      padding: 4px 6px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      justify-content: flex-start;
+      min-width: 0;
     }
 
-    .hour-item img {
-      width: 52px;
-      height: 52px;
+    .hour-label {
+      font-size: clamp(18px, 1.4vw, 27px);
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .hour-col img {
+      width: 44px;
+      height: 44px;
       object-fit: contain;
       display: block;
+      margin-bottom: 10px;
     }
 
     .hour-temp {
-      font-size: clamp(26px, 2vw, 36px);
+      font-size: clamp(26px, 2vw, 38px);
       color: var(--muted);
+      line-height: 1;
+      margin-bottom: 10px;
     }
 
-    .day-card {
-      padding: 18px 30px 18px;
-      min-height: 380px;
+    .hour-wind {
+      font-size: clamp(15px, 1.1vw, 21px);
+      color: rgba(255,255,255,.76);
+      white-space: nowrap;
     }
 
-    .day-head,
-    .day-row {
+    .days-grid {
       display: grid;
-      grid-template-columns: 1.18fr 76px .62fr .62fr .82fr;
+      grid-template-columns: 1.45fr .72fr .72fr .72fr .95fr;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .grid-head,
+    .grid-cell {
+      min-width: 0;
+      display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 8px;
     }
 
-    .day-head {
-      padding: 10px 0 14px;
-      border-bottom: 1px solid var(--line);
-      font-size: clamp(20px, 1.5vw, 26px);
+    .grid-head {
+      font-size: clamp(18px, 1.35vw, 24px);
+      color: var(--muted);
+      padding-bottom: 14px;
+    }
+
+    .grid-row {
+      display: contents;
+    }
+
+    .grid-cell {
+      min-height: 54px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(19px, 1.45vw, 27px);
       color: var(--muted);
     }
 
-    .day-body {
-      padding-top: 14px;
-      display: grid;
-      gap: 14px;
+    .day-name {
+      justify-content: flex-start;
+      padding-left: 8px;
     }
 
-    .day-row {
-      min-height: 50px;
-      font-size: clamp(22px, 1.65vw, 30px);
-      color: var(--muted);
-    }
-
-    .day-row img {
-      width: 42px;
-      height: 42px;
+    .day-icon img {
+      width: 34px;
+      height: 34px;
       object-fit: contain;
       display: block;
+      margin: 0 auto;
     }
 
     @media (max-aspect-ratio: 1/1) {
-      .wrap {
+      .layout {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
-        gap: 24px;
         align-items: start;
-      }
-
-      .left {
-        padding-left: 0;
+        overflow-y: auto;
       }
     }
   </style>
 </head>
 <body>
-  <div class="scene day-partly" id="scene">
-    <div class="photo-sky"></div>
-    <div class="sun-glow"></div>
-    <div class="light-beam"></div>
-    <div class="clouds-back"><span></span><span></span><span></span></div>
-    <div class="clouds-front"><span></span><span></span><span></span></div>
-    <div class="mist"></div>
-    <div class="stars"></div>
-    <div class="shooting-star"></div>
-    <div class="rain-layer"></div>
-    <div class="flash-layer"></div>
+  <div class="app">
+    <div class="bg" id="bg"></div>
+    <div class="bg-overlay"></div>
+    <div class="bg-clouds" id="bgClouds"><span></span><span></span><span></span><span></span></div>
+    <div class="bg-fx" id="bgFx"></div>
+    <div class="bg-stars" id="bgStars"></div>
+    <div class="bg-shooting" id="bgShooting"></div>
 
-    <main class="wrap">
+    <main class="layout">
       <section class="left">
         <h1 class="city">Brescia</h1>
-        <div class="desc" id="currentDesc">Parzialmente nuvoloso</div>
+        <div class="condition" id="currentCondition">Parzialmente nuvoloso</div>
         <div class="date" id="dateLine"></div>
         <div class="temp" id="currentTemp">23°</div>
-        <div class="meta" id="minMaxLine">H: 24° · L: 12°</div>
-        <div class="meta small" id="humidityLine">Umidità 58%</div>
+        <div class="meta" id="minMaxLine">Min 11° · Max 24°</div>
+        <div class="meta small" id="humidityLine">Umidità 54%</div>
 
-        <div class="astro">
+        <div class="moon-block">
           <div class="moon-line">
             <img src="./icons/moon.svg" alt="Luna" />
-            <span id="moonLabel">Luna crescente</span>
+            <span id="moonLine">Luna crescente</span>
           </div>
           <div class="sun-line">
             <img src="./icons/sun.svg" alt="Sole" />
-            <span id="sunLine"></span>
+            <span id="sunLine">Tramonto 19:51</span>
           </div>
         </div>
       </section>
 
       <section class="right">
-        <div class="card hour-card">
-          <div class="hour-top" id="hourTop"></div>
-          <div class="hour-bottom" id="hourBottom"></div>
+        <div class="card hours-card">
+          <div class="hours-grid" id="hoursGrid"></div>
         </div>
 
-        <div class="card day-card">
-          <div class="day-head">
-            <div id="dayTitle">Giovedì</div>
-            <div></div>
-            <div>MIN</div>
-            <div>MAX</div>
-            <div></div>
+        <div class="card days-card">
+          <div class="days-grid" id="daysGrid">
+            <div class="grid-head"></div>
+            <div class="grid-head">Icona</div>
+            <div class="grid-head">Min</div>
+            <div class="grid-head">Max</div>
+            <div class="grid-head">Vento</div>
           </div>
-          <div class="day-body" id="dayBody"></div>
         </div>
       </section>
     </main>
@@ -619,77 +511,59 @@
 
   <script>
     const weatherData = {
-      location: 'Brescia',
+      city: 'Brescia',
       current: {
         condition: 'Parzialmente nuvoloso',
         temp: 23,
-        high: 24,
-        low: 12,
-        humidity: 58,
+        min: 11,
+        max: 24,
+        humidity: 54,
         moonPhase: 'Luna crescente',
-        sunrise: '06:28',
+        sunrise: '06:17',
         sunset: '19:51'
       },
       hourly: [
-        { time: 'Adesso', icon: 'partly-cloudy.svg', temp: 23 },
-        { time: '17', icon: 'partly-cloudy.svg', temp: 24 },
-        { time: '18', icon: 'sun.svg', temp: 24 },
-        { time: '19', icon: 'sun.svg', temp: 23 }
+        { time: 'Adesso', icon: 'partly-cloudy.svg', temp: 23, wind: '10 km/h' },
+        { time: '17', icon: 'partly-cloudy.svg', temp: 23, wind: '10 km/h' },
+        { time: '18', icon: 'partly-cloudy.svg', temp: 17, wind: '10 km/h' },
+        { time: '19', icon: 'cloudy-night.svg', temp: 20, wind: '10 km/h' },
+        { time: '20', icon: 'moon.svg', temp: 18, wind: '8 km/h' }
       ],
       daily: [
-        { day: 'Giovedì', icon: 'cloud.svg', min: 13, max: 20 },
-        { day: 'Venerdì', icon: 'thunder.svg', min: 14, max: 20 },
-        { day: 'Sabato', icon: 'sun.svg', min: 11, max: 23 },
-        { day: 'Domenica', icon: 'partly-cloudy.svg', min: 12, max: 24 },
-        { day: 'Lunedì', icon: 'partly-cloudy.svg', min: 12, max: 23 }
+        { day: 'Mercoledì', icon: 'partly-cloudy.svg', min: 11, max: 24, wind: '10 km/h' },
+        { day: 'Giovedì', icon: 'partly-cloudy.svg', min: 12, max: 25, wind: '11 km/h' },
+        { day: 'Venerdì', icon: 'sun.svg', min: 13, max: 27, wind: '8 km/h' },
+        { day: 'Sabato', icon: 'sun.svg', min: 14, max: 28, wind: '9 km/h' },
+        { day: 'Domenica', icon: 'partly-cloudy.svg', min: 16, max: 26, wind: '7 km/h' }
       ]
     };
 
-    function normalize(s) {
-      return (s || '').toLowerCase();
-    }
+    const backgrounds = {
+      'sereno': './images/sole-sereno.jpg',
+      'poco-nuvoloso': './images/poco-nuvoloso.jpg',
+      'parzialmente-nuvoloso': './images/poco-nuvoloso.jpg',
+      'nuvoloso': './images/nuvoloso.jpg',
+      'pioggia': './images/pioggia.jpg',
+      'temporale': './images/temporale.jpg',
+      'notte-serena': './images/notte-serena.jpg',
+      'notte-nuvolosa': './images/notte-nuvolosa.jpg',
+      'tramonto': './images/tramonto.jpg',
+      'alba': './images/alba.jpg',
+      'nebbia': './images/nebbia.jpg',
+      'neve': './images/neve.jpg',
+      'freddo': './images/neve.jpg'
+    };
 
-    function applyScene() {
-      const scene = document.getElementById('scene');
+    function setDate() {
       const now = new Date();
-      const mins = now.getHours() * 60 + now.getMinutes();
-      const sunrise = 6 * 60 + 28;
-      const sunset = 19 * 60 + 51;
-      const c = normalize(weatherData.current.condition);
-      let cls = 'day-partly';
-
-      const isStorm = c.includes('tempor') || c.includes('thunder');
-      const isRain = c.includes('piogg') || c.includes('rain');
-      const isCloudy = c.includes('nuvol') && !c.includes('parzial');
-      const isPartly = c.includes('parzial') || c.includes('poco');
-      const isClear = c.includes('sereno') || c.includes('sole');
-
-      if (mins >= sunset - 35 && mins < sunset + 25) {
-        cls = 'sunset';
-      } else if (mins >= sunrise && mins < sunset) {
-        if (isStorm) cls = 'storm';
-        else if (isRain) cls = 'rain';
-        else if (isCloudy) cls = 'day-cloudy';
-        else if (isClear) cls = 'day-clear';
-        else cls = 'day-partly';
-      } else {
-        if (isCloudy || isRain || isStorm) cls = 'night-cloudy';
-        else cls = 'night-clear';
-      }
-
-      scene.className = 'scene ' + cls;
-    }
-
-    function updateDateLine() {
-      const now = new Date();
-      const days = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-      const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+      const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+      const mesi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
       const hh = String(now.getHours()).padStart(2, '0');
       const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('dateLine').textContent = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} · ${hh}:${mm}`;
+      document.getElementById('dateLine').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]} · ${hh}:${mm}`;
     }
 
-    function updateSunLine() {
+    function setSunLine() {
       const now = new Date();
       const current = now.getHours() * 60 + now.getMinutes();
       const [srH, srM] = weatherData.current.sunrise.split(':').map(Number);
@@ -699,52 +573,135 @@
       document.getElementById('sunLine').textContent = current >= sunset ? `Alba ${weatherData.current.sunrise}` : `Tramonto ${weatherData.current.sunset}`;
     }
 
-    function renderStatic() {
-      document.getElementById('currentDesc').textContent = weatherData.current.condition;
+    function renderCurrent() {
+      document.getElementById('currentCondition').textContent = weatherData.current.condition;
       document.getElementById('currentTemp').textContent = `${weatherData.current.temp}°`;
-      document.getElementById('minMaxLine').textContent = `H: ${weatherData.current.high}° · L: ${weatherData.current.low}°`;
+      document.getElementById('minMaxLine').textContent = `Min ${weatherData.current.min}° · Max ${weatherData.current.max}°`;
       document.getElementById('humidityLine').textContent = `Umidità ${weatherData.current.humidity}%`;
-      document.getElementById('moonLabel').textContent = weatherData.current.moonPhase;
-      document.getElementById('dayTitle').textContent = weatherData.daily[0].day;
+      document.getElementById('moonLine').textContent = weatherData.current.moonPhase;
+    }
 
-      const hourTop = document.getElementById('hourTop');
-      const hourBottom = document.getElementById('hourBottom');
-      hourTop.innerHTML = '';
-      hourBottom.innerHTML = '';
+    function renderHours() {
+      const grid = document.getElementById('hoursGrid');
+      grid.innerHTML = '';
       weatherData.hourly.forEach(item => {
-        const top = document.createElement('div');
-        top.textContent = item.time;
-        hourTop.appendChild(top);
-
-        const bottom = document.createElement('div');
-        bottom.className = 'hour-item';
-        bottom.innerHTML = `<img src="./icons/${item.icon}" alt=""><div class="hour-temp">${item.temp}°</div>`;
-        hourBottom.appendChild(bottom);
-      });
-
-      const body = document.getElementById('dayBody');
-      body.innerHTML = '';
-      weatherData.daily.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'day-row';
-        row.innerHTML = `
-          <div>${item.day}</div>
-          <div><img src="./icons/${item.icon}" alt=""></div>
-          <div>${item.min}°</div>
-          <div>${item.max}°</div>
-          <div></div>
+        const col = document.createElement('div');
+        col.className = 'hour-col';
+        col.innerHTML = `
+          <div class="hour-label">${item.time}</div>
+          <img src="./icons/${item.icon}" alt="">
+          <div class="hour-temp">${item.temp}°</div>
+          <div class="hour-wind">${item.wind}</div>
         `;
-        body.appendChild(row);
+        grid.appendChild(col);
       });
     }
 
-    renderStatic();
-    updateDateLine();
-    updateSunLine();
-    applyScene();
-    setInterval(updateDateLine, 30000);
-    setInterval(updateSunLine, 60000);
-    setInterval(applyScene, 60000);
+    function renderDays() {
+      const grid = document.getElementById('daysGrid');
+      grid.innerHTML = `
+        <div class="grid-head"></div>
+        <div class="grid-head">Icona</div>
+        <div class="grid-head">Min</div>
+        <div class="grid-head">Max</div>
+        <div class="grid-head">Vento</div>
+      `;
+
+      weatherData.daily.forEach(item => {
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="grid-cell day-name">${item.day}</div>
+          <div class="grid-cell day-icon"><img src="./icons/${item.icon}" alt=""></div>
+          <div class="grid-cell">${item.min}°</div>
+          <div class="grid-cell">${item.max}°</div>
+          <div class="grid-cell">${item.wind}</div>
+        `);
+      });
+    }
+
+    function normalize(str) {
+      return (str || '').toLowerCase();
+    }
+
+    function chooseBackground() {
+      const now = new Date();
+      const mins = now.getHours() * 60 + now.getMinutes();
+      const sunrise = 6 * 60 + 17;
+      const sunset = 19 * 60 + 51;
+      const c = normalize(weatherData.current.condition);
+
+      const bg = document.getElementById('bg');
+      const clouds = document.getElementById('bgClouds');
+      const fx = document.getElementById('bgFx');
+      const stars = document.getElementById('bgStars');
+      const shooting = document.getElementById('bgShooting');
+
+      let img = backgrounds['poco-nuvoloso'];
+      let fxClass = '';
+      clouds.style.opacity = '0';
+      stars.style.opacity = '0';
+      shooting.style.opacity = '0';
+
+      const isStorm = c.includes('tempor');
+      const isRain = c.includes('piogg');
+      const isFog = c.includes('nebb');
+      const isSnow = c.includes('nev');
+      const isCold = c.includes('ghiaccio') || c.includes('gel') || c.includes('fredd');
+      const isCloudy = c.includes('nuvol') && !c.includes('poco') && !c.includes('parzial');
+      const isPartly = c.includes('poco') || c.includes('parzial');
+      const isClear = c.includes('sereno') || c.includes('sole');
+
+      if (mins >= sunrise - 20 && mins <= sunrise + 35) {
+        img = backgrounds['alba'];
+        fxClass = 'sunrise';
+      } else if (mins >= sunset - 35 && mins <= sunset + 25) {
+        img = backgrounds['tramonto'];
+        fxClass = 'sunset';
+      } else if (mins > sunset || mins < sunrise) {
+        if (isCloudy || isRain || isStorm) {
+          img = backgrounds['notte-nuvolosa'];
+          clouds.style.opacity = '.14';
+        } else {
+          img = backgrounds['notte-serena'];
+          stars.style.opacity = '.78';
+          shooting.style.opacity = '1';
+        }
+      } else if (isFog) {
+        img = backgrounds['nebbia'];
+      } else if (isSnow || isCold) {
+        img = backgrounds['neve'];
+        fxClass = 'neve';
+      } else if (isStorm) {
+        img = backgrounds['temporale'];
+        fxClass = 'storm';
+        clouds.style.opacity = '.22';
+      } else if (isRain) {
+        img = backgrounds['pioggia'];
+        fxClass = 'rain';
+        clouds.style.opacity = '.18';
+      } else if (isCloudy) {
+        img = backgrounds['nuvoloso'];
+        clouds.style.opacity = '.20';
+      } else if (isClear) {
+        img = backgrounds['sole-sereno'];
+      } else if (isPartly) {
+        img = backgrounds['poco-nuvoloso'];
+        clouds.style.opacity = '.16';
+      }
+
+      bg.style.backgroundImage = `url('${img}')`;
+      fx.className = 'bg-fx' + (fxClass ? ' ' + fxClass : '');
+    }
+
+    renderCurrent();
+    renderHours();
+    renderDays();
+    setDate();
+    setSunLine();
+    chooseBackground();
+
+    setInterval(setDate, 30000);
+    setInterval(setSunLine, 60000);
+    setInterval(chooseBackground, 60000);
 
     (function () {
       const url = new URL(window.location.href);
