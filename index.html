@@ -3,175 +3,529 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meteo Brescia</title>
-
-  <!-- NO CACHE -->
+  <title>Meteo Brescia Centro</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-
   <style>
     @font-face {
       font-family: 'Gotham';
-      src: url('./fonts/Gotham-Book.otf');
+      src: url('./fonts/Gotham-Book.otf') format('opentype');
       font-weight: 400;
+      font-style: normal;
     }
-
     @font-face {
       font-family: 'Gotham';
-      src: url('./fonts/Gotham-Bold.otf');
+      src: url('./fonts/Gotham-Bold.otf') format('opentype');
       font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('./fonts/Gotham-Black.otf') format('opentype');
+      font-weight: 900;
+      font-style: normal;
+    }
+
+    :root {
+      --text: rgba(255,255,255,.97);
+      --muted: rgba(255,255,255,.88);
+      --soft: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.12);
+      --panel-border: rgba(255,255,255,.22);
+      --panel-top: rgba(255,255,255,.16);
+      --shadow: 0 18px 42px rgba(0,0,0,.16);
+      --blur: 14px;
+      --radius: 30px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Gotham', sans-serif;
+      color: var(--text);
+      background: #2f69be;
     }
 
     body {
-      margin: 0;
-      font-family: 'Gotham', sans-serif;
-      color: white;
-      background: linear-gradient(180deg, #2f6fd3, #9cc3ea);
+      letter-spacing: -0.015em;
     }
 
-    .layout {
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 83% 15%, rgba(255,232,176,.58), rgba(255,232,176,0) 12%),
+        radial-gradient(circle at 70% 78%, rgba(255,214,170,.18), rgba(255,214,170,0) 18%),
+        linear-gradient(180deg, #1e5eb6 0%, #3f79c4 36%, #77a1d4 72%, #b6cce5 100%);
+    }
+
+    .sky, .sun-glow, .clouds-back, .clouds-front, .haze {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .sky::before,
+    .sky::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: screen;
+    }
+
+    .sky::before {
+      background:
+        radial-gradient(ellipse at 18% 76%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 28%),
+        radial-gradient(ellipse at 52% 30%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 26%),
+        radial-gradient(ellipse at 85% 56%, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 22%),
+        radial-gradient(ellipse at 90% 88%, rgba(255,225,180,.18) 0%, rgba(255,225,180,0) 18%);
+      filter: blur(18px);
+      opacity: .9;
+    }
+
+    .sky::after {
+      background:
+        linear-gradient(165deg, transparent 45%, rgba(255,255,255,.22) 49%, transparent 53%);
+      opacity: .25;
+      transform: translateX(8%);
+    }
+
+    .sun-glow::before {
+      content: "";
+      position: absolute;
+      right: 7%;
+      top: 7%;
+      width: 22vw;
+      height: 22vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,247,225,.95) 0%, rgba(255,229,180,.45) 24%, rgba(255,229,180,.14) 44%, rgba(255,229,180,0) 68%);
+      filter: blur(8px);
+      animation: glowPulse 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from { transform: scale(1); opacity: .92; }
+      to { transform: scale(1.05); opacity: 1; }
+    }
+
+    .clouds-back span,
+    .clouds-front span {
+      position: absolute;
+      display: block;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 38%, rgba(255,255,255,.88) 0%, rgba(255,255,255,.56) 38%, rgba(255,255,255,.08) 66%, rgba(255,255,255,0) 80%);
+      filter: blur(16px);
+      mix-blend-mode: screen;
+      animation: drift linear infinite;
+    }
+
+    .clouds-back span:nth-child(1) { width: 34vw; height: 10vw; top: 18%; left: -12vw; animation-duration: 120s; opacity: .22; }
+    .clouds-back span:nth-child(2) { width: 28vw; height: 9vw; top: 46%; left: 24vw; animation-duration: 140s; animation-delay: -28s; opacity: .18; }
+    .clouds-back span:nth-child(3) { width: 36vw; height: 11vw; top: 70%; left: 62vw; animation-duration: 128s; animation-delay: -50s; opacity: .2; }
+
+    .clouds-front span:nth-child(1) { width: 28vw; height: 9vw; top: 24%; left: -8vw; animation-duration: 64s; opacity: .26; }
+    .clouds-front span:nth-child(2) { width: 34vw; height: 10vw; top: 58%; left: 12vw; animation-duration: 74s; animation-delay: -18s; opacity: .22; }
+    .clouds-front span:nth-child(3) { width: 30vw; height: 9vw; top: 80%; left: 68vw; animation-duration: 70s; animation-delay: -34s; opacity: .18; }
+
+    @keyframes drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(118vw); }
+    }
+
+    .haze {
+      bottom: -4%;
+      top: auto;
+      height: 34%;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.05) 40%, rgba(255,255,255,.16) 100%);
+      filter: blur(24px);
+      animation: hazeMove 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes hazeMove {
+      from { transform: translateX(-1%); }
+      to { transform: translateX(1%); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 42px 44px;
       display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      height: 100vh;
-      padding: 40px;
-      gap: 40px;
+      grid-template-columns: 1fr 1.95fr;
+      gap: 34px;
+      align-items: center;
     }
 
     .left {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding-left: 20px;
     }
 
     .city {
-      font-size: 70px;
+      margin: 0;
+      font-size: clamp(54px, 5vw, 84px);
       font-weight: 700;
+      line-height: .95;
+      text-shadow: 0 2px 10px rgba(0,0,0,.14);
+    }
+
+    .current-desc {
+      margin-top: 14px;
+      font-size: clamp(20px, 1.75vw, 32px);
+      font-weight: 400;
+      color: var(--muted);
+      text-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+
+    .current-date {
+      margin-top: 10px;
+      font-size: clamp(18px, 1.45vw, 26px);
+      font-weight: 400;
+      color: var(--soft);
+      text-shadow: 0 2px 8px rgba(0,0,0,.10);
     }
 
     .temp {
-      font-size: 180px;
-      font-weight: 300;
+      margin-top: 28px;
+      font-size: clamp(148px, 14vw, 230px);
+      line-height: .82;
+      letter-spacing: -0.085em;
+      font-weight: 400;
+      text-shadow: 0 4px 16px rgba(0,0,0,.1);
     }
 
     .meta {
-      font-size: 24px;
-      opacity: 0.9;
+      margin-top: 14px;
+      font-size: clamp(22px, 1.8vw, 32px);
+      color: var(--muted);
+      font-weight: 400;
+      text-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    .meta.humidity {
+      margin-top: 8px;
+    }
+
+    .astro {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .moon-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .moon-wrap img {
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.14));
+    }
+
+    .sun-event {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(20px, 1.65vw, 28px);
+      color: var(--muted);
+    }
+
+    .sun-event img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      display: block;
     }
 
     .right {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 26px;
       justify-content: center;
     }
 
     .card {
-      background: rgba(255,255,255,0.2);
-      border-radius: 25px;
-      padding: 20px;
-      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel));
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--blur)) saturate(120%);
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(120%);
     }
 
-    .hourly {
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 38%);
+      pointer-events: none;
+    }
+
+    .hourly-card {
+      padding: 18px 26px 20px;
+      min-height: 184px;
+    }
+
+    .hour-grid {
       display: grid;
-      grid-template-columns: repeat(5,1fr);
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
       text-align: center;
     }
 
-    .daily-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      padding: 10px 0;
+    .hour-top {
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      font-size: clamp(18px, 1.4vw, 26px);
+      color: var(--muted);
     }
 
+    .hour-bottom {
+      padding-top: 10px;
+      gap: 2px;
+    }
+
+    .hour-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hour-item img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.10));
+    }
+
+    .hour-item .temp-val {
+      font-size: clamp(22px, 1.8vw, 34px);
+      color: var(--muted);
+    }
+
+    .daily-card {
+      padding: 18px 28px 18px;
+      min-height: 360px;
+    }
+
+    .daily-head,
+    .daily-row {
+      display: grid;
+      grid-template-columns: 1.18fr 72px .65fr .65fr .9fr;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .daily-head {
+      padding: 10px 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      font-size: clamp(18px, 1.45vw, 24px);
+      color: var(--muted);
+    }
+
+    .daily-body {
+      padding-top: 14px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .daily-row {
+      min-height: 46px;
+      font-size: clamp(18px, 1.55vw, 28px);
+      color: var(--muted);
+    }
+
+    .daily-row img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,.08));
+    }
+
+    @media (max-aspect-ratio: 1/1) {
+      .wrap {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+      .left {
+        padding-left: 0;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="scene">
+    <div class="sky"></div>
+    <div class="sun-glow"></div>
+    <div class="clouds-back"><span></span><span></span><span></span></div>
+    <div class="clouds-front"><span></span><span></span><span></span></div>
+    <div class="haze"></div>
 
-<div class="layout">
+    <main class="wrap">
+      <section class="left">
+        <h1 class="city" id="cityName">Brescia</h1>
+        <div class="current-desc" id="currentDesc">Parzialmente nuvoloso</div>
+        <div class="current-date" id="currentDate">Mercoledì 8 Aprile · 17:29</div>
+        <div class="temp" id="currentTemp">23°</div>
+        <div class="meta" id="minMaxLine">Min 12° · Max 24°</div>
+        <div class="meta humidity" id="humidityLine">Umidità 58%</div>
 
-  <div class="left">
-    <div class="city">Brescia</div>
-    <div class="meta">Parzialmente nuvoloso</div>
-    <div class="meta" id="time"></div>
+        <div class="astro">
+          <div class="moon-wrap">
+            <img src="./icons/moon.svg" alt="Luna">
+            <div class="meta" id="moonPhase" style="margin-top:0;">Luna crescente</div>
+          </div>
+          <div class="sun-event">
+            <img src="./icons/sun.svg" alt="Evento sole">
+            <span id="sunEventText">Tramonto 19:51</span>
+          </div>
+        </div>
+      </section>
 
-    <div class="temp">23°</div>
+      <section class="right">
+        <div class="card hourly-card">
+          <div class="hour-grid hour-top" id="hourTop"></div>
+          <div class="hour-grid hour-bottom" id="hourBottom"></div>
+        </div>
 
-    <div class="meta">Min 12° · Max 24°</div>
-    <div class="meta">Umidità 58%</div>
-
-    <div class="meta">🌔 Luna crescente</div>
-    <div class="meta" id="sunEvent"></div>
+        <div class="card daily-card">
+          <div class="daily-head">
+            <div></div>
+            <div></div>
+            <div>Min</div>
+            <div>Max</div>
+            <div>Vento</div>
+          </div>
+          <div class="daily-body" id="dailyBody"></div>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="right">
+  <script>
+    const weatherData = {
+      city: 'Brescia',
+      zone: 'Centro',
+      current: {
+        condition: 'Parzialmente nuvoloso',
+        temp: 23,
+        min: 12,
+        max: 24,
+        humidity: 58,
+        moonPhase: 'Luna crescente',
+        sunrise: '06:28',
+        sunset: '19:51'
+      },
+      hourly: [
+        { time: 'Adesso', icon: 'partly-cloudy.svg', temp: 23 },
+        { time: '17', icon: 'partly-cloudy.svg', temp: 24 },
+        { time: '18', icon: 'sun.svg', temp: 24 },
+        { time: '19', icon: 'sun.svg', temp: 23 },
+        { time: '20', icon: 'partly-cloudy.svg', temp: 21 }
+      ],
+      daily: [
+        { day: 'Giovedì', icon: 'cloud.svg', min: 13, max: 20, wind: '12 km/h' },
+        { day: 'Venerdì', icon: 'thunder.svg', min: 14, max: 20, wind: '18 km/h' },
+        { day: 'Sabato', icon: 'sun.svg', min: 11, max: 23, wind: '9 km/h' },
+        { day: 'Domenica', icon: 'partly-cloudy.svg', min: 12, max: 24, wind: '10 km/h' }
+      ]
+    };
 
-    <div class="card">
-      <div class="hourly">
-        <div>Adesso</div>
-        <div>17</div>
-        <div>18</div>
-        <div>19</div>
-        <div>20</div>
+    function updateDate() {
+      const now = new Date();
+      const giorni = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+      const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('currentDate').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]} · ${hh}:${mm}`;
+    }
 
-        <div>23°</div>
-        <div>24°</div>
-        <div>24°</div>
-        <div>23°</div>
-        <div>21°</div>
-      </div>
-    </div>
+    function updateSunEvent() {
+      const now = new Date();
+      const [sunsetH, sunsetM] = weatherData.current.sunset.split(':').map(Number);
+      const currentMins = now.getHours() * 60 + now.getMinutes();
+      const sunsetMins = sunsetH * 60 + sunsetM;
+      document.getElementById('sunEventText').textContent = currentMins >= sunsetMins
+        ? `Alba ${weatherData.current.sunrise}`
+        : `Tramonto ${weatherData.current.sunset}`;
+    }
 
-    <div class="card">
-      <div class="daily-row">
-        <div></div><div></div><div>Min</div><div>Max</div><div>Vento</div>
-      </div>
+    function renderStatic() {
+      document.getElementById('cityName').textContent = weatherData.city;
+      document.getElementById('currentDesc').textContent = weatherData.current.condition;
+      document.getElementById('currentTemp').textContent = `${weatherData.current.temp}°`;
+      document.getElementById('minMaxLine').textContent = `Min ${weatherData.current.min}° · Max ${weatherData.current.max}°`;
+      document.getElementById('humidityLine').textContent = `Umidità ${weatherData.current.humidity}%`;
+      document.getElementById('moonPhase').textContent = weatherData.current.moonPhase;
 
-      <div class="daily-row"><div>Giovedì</div><div>☁️</div><div>13°</div><div>20°</div><div>12 km/h</div></div>
-      <div class="daily-row"><div>Venerdì</div><div>⛈</div><div>14°</div><div>20°</div><div>18 km/h</div></div>
-      <div class="daily-row"><div>Sabato</div><div>☀️</div><div>11°</div><div>23°</div><div>9 km/h</div></div>
-      <div class="daily-row"><div>Domenica</div><div>⛅</div><div>12°</div><div>24°</div><div>10 km/h</div></div>
-    </div>
+      const hourTop = document.getElementById('hourTop');
+      const hourBottom = document.getElementById('hourBottom');
+      hourTop.innerHTML = '';
+      hourBottom.innerHTML = '';
 
-  </div>
+      weatherData.hourly.forEach(item => {
+        const topCell = document.createElement('div');
+        topCell.textContent = item.time;
+        hourTop.appendChild(topCell);
 
-</div>
+        const bottomCell = document.createElement('div');
+        bottomCell.className = 'hour-item';
+        bottomCell.innerHTML = `<img src="./icons/${item.icon}" alt=""><div class="temp-val">${item.temp}°</div>`;
+        hourBottom.appendChild(bottomCell);
+      });
 
-<script>
+      const dailyBody = document.getElementById('dailyBody');
+      dailyBody.innerHTML = '';
+      weatherData.daily.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'daily-row';
+        row.innerHTML = `
+          <div>${item.day}</div>
+          <div><img src="./icons/${item.icon}" alt=""></div>
+          <div>${item.min}°</div>
+          <div>${item.max}°</div>
+          <div>${item.wind}</div>
+        `;
+        dailyBody.appendChild(row);
+      });
+    }
 
-// ORA DINAMICA
-function updateTime() {
-  const now = new Date();
-  document.getElementById('time').innerText = now.toLocaleString('it-IT', {
-    weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
-  });
-}
+    renderStatic();
+    updateDate();
+    updateSunEvent();
+    setInterval(updateDate, 30000);
+    setInterval(updateSunEvent, 60000);
 
-// ALBA / TRAMONTO DINAMICO
-function updateSun() {
-  const now = new Date();
-  const sunset = 19 * 60 + 51;
-  const current = now.getHours()*60 + now.getMinutes();
-
-  document.getElementById('sunEvent').innerText =
-    current > sunset ? "Alba 06:28" : "Tramonto 19:51";
-}
-
-updateTime();
-updateSun();
-setInterval(updateTime, 60000);
-
-// CACHE BUSTER AUTOMATICO
-(function () {
-  const url = new URL(window.location.href);
-  if (!url.searchParams.get('v')) {
-    url.searchParams.set('v', Date.now());
-    window.location.replace(url);
-  }
-})();
-
-</script>
-
+    (function() {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.get('v')) {
+        url.searchParams.set('v', Date.now());
+        window.location.replace(url.toString());
+      }
+    })();
+  </script>
 </body>
 </html>
