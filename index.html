@@ -117,32 +117,32 @@
 
     .bg-fx.sunset::before,
     .bg-fx.sunrise::before {
-      opacity: .52;
-      background: radial-gradient(circle at 80% 18%, rgba(255,223,172,.48), rgba(255,223,172,0) 18%);
+      opacity: .45;
+      background: radial-gradient(circle at 80% 18%, rgba(255,223,172,.42), rgba(255,223,172,0) 18%);
       filter: blur(18px);
-      animation: glow 8s ease-in-out infinite alternate;
+      animation: glow 10s ease-in-out infinite alternate;
     }
 
     .bg-fx.rain::before {
-      opacity: .32;
-      background: repeating-linear-gradient(100deg, rgba(255,255,255,.14) 0 1px, transparent 1px 16px);
+      opacity: .26;
+      background: repeating-linear-gradient(100deg, rgba(255,255,255,.13) 0 1px, transparent 1px 16px);
       animation: rainMove .9s linear infinite;
     }
 
     .bg-fx.storm::before {
-      opacity: .28;
-      background: repeating-linear-gradient(100deg, rgba(255,255,255,.13) 0 1px, transparent 1px 17px);
-      animation: rainMove .8s linear infinite;
+      opacity: .24;
+      background: repeating-linear-gradient(100deg, rgba(255,255,255,.12) 0 1px, transparent 1px 17px);
+      animation: rainMove .85s linear infinite;
     }
 
     .bg-fx.storm::after {
       opacity: 1;
       background: rgba(210,220,255,0);
-      animation: flash 7s linear infinite;
+      animation: flash 9s linear infinite;
     }
 
     .bg-fx.neve::before {
-      opacity: .28;
+      opacity: .22;
       background:
         radial-gradient(circle at 10% 12%, rgba(255,255,255,.92) 0 1.2px, transparent 1.7px),
         radial-gradient(circle at 26% 38%, rgba(255,255,255,.9) 0 1.4px, transparent 1.9px),
@@ -150,12 +150,12 @@
         radial-gradient(circle at 62% 30%, rgba(255,255,255,.88) 0 1.4px, transparent 1.9px),
         radial-gradient(circle at 80% 18%, rgba(255,255,255,.92) 0 1.2px, transparent 1.8px),
         radial-gradient(circle at 90% 46%, rgba(255,255,255,.88) 0 1.5px, transparent 2px);
-      animation: snowMove 8s linear infinite;
+      animation: snowMove 10s linear infinite;
     }
 
     @keyframes glow {
       from { transform: scale(1); }
-      to { transform: scale(1.04); }
+      to { transform: scale(1.03); }
     }
     @keyframes rainMove {
       from { transform: translateY(-25px); }
@@ -166,51 +166,120 @@
       to { transform: translateY(18px); }
     }
     @keyframes flash {
-      0%, 92%, 100% { background: rgba(210,220,255,0); }
-      93% { background: rgba(210,220,255,.16); }
-      94% { background: rgba(210,220,255,0); }
-      95% { background: rgba(210,220,255,.08); }
+      0%, 94%, 100% { background: rgba(210,220,255,0); }
+      95% { background: rgba(210,220,255,.12); }
       96% { background: rgba(210,220,255,0); }
+      97% { background: rgba(210,220,255,.06); }
+      98% { background: rgba(210,220,255,0); }
     }
 
     .bg-stars {
       opacity: 0;
       transition: opacity .6s ease;
       background-image:
-        radial-gradient(circle at 8% 18%, rgba(255,255,255,.95) 0 1.2px, transparent 1.7px),
-        radial-gradient(circle at 18% 10%, rgba(255,255,255,.8) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 31% 16%, rgba(255,255,255,.92) 0 1.2px, transparent 1.7px),
-        radial-gradient(circle at 48% 11%, rgba(255,255,255,.9) 0 1.1px, transparent 1.7px),
-        radial-gradient(circle at 67% 22%, rgba(255,255,255,.78) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 82% 13%, rgba(255,255,255,.95) 0 1.3px, transparent 1.8px),
-        radial-gradient(circle at 90% 26%, rgba(255,255,255,.85) 0 1.1px, transparent 1.7px);
-      animation: twinkle 4s ease-in-out infinite alternate;
+        radial-gradient(circle at 4% 10%, rgba(255,255,255,.98) 0 1.3px, transparent 1.8px),
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,.95) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 12% 30%, rgba(255,255,255,.88) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 18% 10%, rgba(255,255,255,.82) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 22% 22%, rgba(255,255,255,.95) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 31% 16%, rgba(255,255,255,.98) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 36% 28%, rgba(255,255,255,.86) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 48% 11%, rgba(255,255,255,.92) 0 1.3px, transparent 1.9px),
+        radial-gradient(circle at 54% 23%, rgba(255,255,255,.84) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 61% 9%, rgba(255,255,255,.96) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 67% 22%, rgba(255,255,255,.8) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 73% 15%, rgba(255,255,255,.9) 0 1.3px, transparent 1.9px),
+        radial-gradient(circle at 82% 13%, rgba(255,255,255,.98) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 86% 25%, rgba(255,255,255,.86) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 90% 26%, rgba(255,255,255,.88) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 95% 8%, rgba(255,255,255,.98) 0 1.4px, transparent 1.9px);
+      animation: twinkle 2.6s ease-in-out infinite alternate;
+    }
+
+    .bg-stars::before,
+    .bg-stars::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 6% 24%, rgba(255,255,255,.95) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 16% 14%, rgba(255,255,255,.85) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 26% 8%, rgba(255,255,255,.98) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 34% 20%, rgba(255,255,255,.82) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 44% 14%, rgba(255,255,255,.96) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 58% 18%, rgba(255,255,255,.9) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 70% 10%, rgba(255,255,255,.96) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 78% 22%, rgba(255,255,255,.84) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 88% 16%, rgba(255,255,255,.98) 0 1.5px, transparent 2px);
+      opacity: .65;
+    }
+
+    .bg-stars::before {
+      animation: twinkle2 3.1s ease-in-out infinite alternate;
+    }
+
+    .bg-stars::after {
+      animation: twinkle3 4.2s ease-in-out infinite alternate;
     }
 
     @keyframes twinkle {
-      from { opacity: .38; }
-      to { opacity: .9; }
+      from { opacity: .45; filter: brightness(.95); }
+      to { opacity: 1; filter: brightness(1.35); }
+    }
+
+    @keyframes twinkle2 {
+      from { opacity: .28; transform: scale(1); }
+      to { opacity: .85; transform: scale(1.01); }
+    }
+
+    @keyframes twinkle3 {
+      from { opacity: .22; }
+      to { opacity: .72; }
+    }
+      to { opacity: .72; }
+    }
+
+    .bg-shooting::before,
+    .bg-shooting::after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.98);
+      opacity: 0;
+      transform: rotate(-28deg);
     }
 
     .bg-shooting::before {
-      content: '';
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      top: 20%;
+      top: 18%;
       left: 72%;
-      border-radius: 50%;
-      background: rgba(255,255,255,.98);
-      box-shadow: 0 0 12px rgba(255,255,255,.95), -80px 25px 18px rgba(255,255,255,.25);
-      opacity: 0;
-      transform: rotate(-30deg);
-      animation: shooting 12s linear infinite;
+      box-shadow: 0 0 14px rgba(255,255,255,.95), -140px 42px 26px rgba(255,255,255,.24);
+      animation: shooting 9s linear infinite;
+    }
+
+    .bg-shooting::after {
+      top: 30%;
+      left: 18%;
+      box-shadow: 0 0 12px rgba(255,255,255,.92), -110px 36px 20px rgba(255,255,255,.2);
+      animation: shooting2 13s linear infinite;
     }
 
     @keyframes shooting {
-      0%, 82% { opacity: 0; transform: translate(0,0) rotate(-30deg); }
-      84% { opacity: 1; }
-      92% { opacity: .95; transform: translate(160px, 90px) rotate(-30deg); }
+      0%, 70% { opacity: 0; transform: translate(0,0) rotate(-28deg); }
+      72% { opacity: 1; }
+      79% { opacity: .98; transform: translate(240px, 120px) rotate(-28deg); }
+      100% { opacity: 0; transform: translate(320px, 160px) rotate(-28deg); }
+    }
+
+    @keyframes shooting2 {
+      0%, 82% { opacity: 0; transform: translate(0,0) rotate(-24deg); }
+      84% { opacity: .95; }
+      90% { opacity: .98; transform: translate(180px, 95px) rotate(-24deg); }
+      100% { opacity: 0; transform: translate(250px, 130px) rotate(-24deg); }
+    }
+      86% { opacity: 1; }
+      93% { opacity: .95; transform: translate(160px, 90px) rotate(-30deg); }
       100% { opacity: 0; transform: translate(220px, 120px) rotate(-30deg); }
     }
 
@@ -349,6 +418,7 @@
       padding: 18px 22px 18px;
     }
 
+    /* griglia condivisa: colonne perfettamente allineate */
     .shared-grid {
       display: grid;
       grid-template-columns: 1.45fr .72fr .72fr .72fr .95fr;
@@ -607,14 +677,14 @@
       fx.className = 'bg-fx';
 
       if (key === 'parzialmente-nuvoloso' || key === 'poco-nuvoloso' || key === 'nuvoloso' || key === 'notte-nuvolosa') {
-        clouds.style.opacity = '.2';
+        clouds.style.opacity = '.16';
       }
       if (key === 'pioggia') {
         clouds.style.opacity = '.18';
         fx.className = 'bg-fx rain';
       }
       if (key === 'temporale') {
-        clouds.style.opacity = '.22';
+        clouds.style.opacity = '.20';
         fx.className = 'bg-fx storm';
       }
       if (key === 'neve' || key === 'freddo') {
@@ -623,11 +693,11 @@
       if (key === 'alba') fx.className = 'bg-fx sunrise';
       if (key === 'tramonto') fx.className = 'bg-fx sunset';
       if (key === 'notte-serena') {
-        stars.style.opacity = '.88';
+        stars.style.opacity = '.78';
         shooting.style.opacity = '1';
       }
       if (key === 'notte-nuvolosa') {
-        stars.style.opacity = '.28';
+        stars.style.opacity = '.22';
       }
     }
 
@@ -743,7 +813,7 @@
 
     init();
     setInterval(formatDateLine, 30000);
-    setInterval(init, 10 * 60 * 1000);
+    setInterval(init, 15 * 60 * 1000);
 
     (function () {
       const url = new URL(window.location.href);
