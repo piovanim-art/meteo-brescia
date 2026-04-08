@@ -14,7 +14,6 @@
       font-weight: 400;
       font-style: normal;
     }
-
     @font-face {
       font-family: 'Gotham';
       src: url('./fonts/Gotham-Bold.otf') format('opentype');
@@ -25,15 +24,13 @@
     :root {
       --text: rgba(255,255,255,.98);
       --muted: rgba(255,255,255,.90);
-      --soft: rgba(255,255,255,.74);
+      --soft: rgba(255,255,255,.76);
       --glass: rgba(255,255,255,.14);
       --glass-2: rgba(255,255,255,.09);
       --glass-border: rgba(255,255,255,.22);
-      --line: rgba(255,255,255,.16);
-      --shadow: 0 20px 50px rgba(0,0,0,.18);
+      --line: rgba(255,255,255,.15);
+      --shadow: 0 18px 46px rgba(0,0,0,.18);
       --radius: 30px;
-      --left-col: 33%;
-      --right-col: 67%;
     }
 
     * { box-sizing: border-box; }
@@ -48,9 +45,7 @@
       background: #355f9d;
     }
 
-    body {
-      letter-spacing: -0.02em;
-    }
+    body { letter-spacing: -0.02em; }
 
     .app {
       position: relative;
@@ -76,13 +71,13 @@
       background-repeat: no-repeat;
       background-size: cover;
       transform: scale(1.03);
-      transition: background-image 0.8s ease, opacity 0.8s ease;
+      transition: background-image .8s ease;
     }
 
     .bg-overlay {
       background:
-        linear-gradient(90deg, rgba(19,35,64,.28) 0%, rgba(19,35,64,.16) 27%, rgba(19,35,64,.06) 55%, rgba(19,35,64,.08) 100%),
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 22%, rgba(0,0,0,.08) 100%);
+        linear-gradient(90deg, rgba(18,30,55,.28) 0%, rgba(18,30,55,.16) 28%, rgba(18,30,55,.08) 58%, rgba(18,30,55,.08) 100%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 24%, rgba(0,0,0,.08) 100%);
       backdrop-filter: blur(1px);
     }
 
@@ -162,17 +157,14 @@
       from { transform: scale(1); }
       to { transform: scale(1.03); }
     }
-
     @keyframes rainMove {
       from { transform: translateY(-25px); }
       to { transform: translateY(25px); }
     }
-
     @keyframes snowMove {
       from { transform: translateY(-18px); }
       to { transform: translateY(18px); }
     }
-
     @keyframes flash {
       0%, 94%, 100% { background: rgba(210,220,255,0); }
       95% { background: rgba(210,220,255,.12); }
@@ -228,7 +220,7 @@
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: var(--left-col) var(--right-col);
+      grid-template-columns: 33% 67%;
       padding: 50px 56px;
       gap: 26px;
       align-items: center;
@@ -352,35 +344,40 @@
       pointer-events: none;
     }
 
-    .hours-card {
-      padding: 18px 22px 18px;
-    }
-
+    .hours-card,
     .days-card {
       padding: 18px 22px 18px;
     }
 
-    .hours-grid {
+    /* griglia condivisa: colonne perfettamente allineate */
+    .shared-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 1.45fr .72fr .72fr .72fr .95fr;
       gap: 0;
       align-items: stretch;
     }
 
-    .hour-col {
+    .hour-col,
+    .grid-head,
+    .grid-cell {
+      min-width: 0;
       text-align: center;
-      padding: 4px 6px 6px;
+      padding: 8px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+    }
+
+    .hour-col {
       justify-content: flex-start;
-      min-width: 0;
     }
 
     .hour-label {
       font-size: clamp(18px, 1.4vw, 27px);
       color: var(--muted);
       margin-bottom: 12px;
+      width: 100%;
     }
 
     .hour-col img {
@@ -404,31 +401,11 @@
       white-space: nowrap;
     }
 
-    .days-grid {
-      display: grid;
-      grid-template-columns: 1.45fr .72fr .72fr .72fr .95fr;
-      gap: 0;
-      align-items: stretch;
-    }
-
-    .grid-head,
-    .grid-cell {
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 10px 8px;
-    }
-
     .grid-head {
       font-size: clamp(18px, 1.35vw, 24px);
       color: var(--muted);
       padding-bottom: 14px;
-    }
-
-    .grid-row {
-      display: contents;
+      flex-direction: row;
     }
 
     .grid-cell {
@@ -436,6 +413,7 @@
       border-top: 1px solid var(--line);
       font-size: clamp(19px, 1.45vw, 27px);
       color: var(--muted);
+      flex-direction: row;
     }
 
     .day-name {
@@ -473,69 +451,41 @@
     <main class="layout">
       <section class="left">
         <h1 class="city">Brescia</h1>
-        <div class="condition" id="currentCondition">Parzialmente nuvoloso</div>
+        <div class="condition" id="currentCondition">Caricamento…</div>
         <div class="date" id="dateLine"></div>
-        <div class="temp" id="currentTemp">23°</div>
-        <div class="meta" id="minMaxLine">Min 11° · Max 24°</div>
-        <div class="meta small" id="humidityLine">Umidità 54%</div>
+        <div class="temp" id="currentTemp">--°</div>
+        <div class="meta" id="minMaxLine">Min --° · Max --°</div>
+        <div class="meta small" id="humidityLine">Umidità --%</div>
 
         <div class="moon-block">
           <div class="moon-line">
             <img src="./icons/moon.svg" alt="Luna" />
-            <span id="moonLine">Luna crescente</span>
+            <span id="moonLine">Fase lunare</span>
           </div>
           <div class="sun-line">
             <img src="./icons/sun.svg" alt="Sole" />
-            <span id="sunLine">Tramonto 19:51</span>
+            <span id="sunLine">Alba / Tramonto</span>
           </div>
         </div>
       </section>
 
       <section class="right">
         <div class="card hours-card">
-          <div class="hours-grid" id="hoursGrid"></div>
+          <div class="shared-grid" id="hoursGrid"></div>
         </div>
 
         <div class="card days-card">
-          <div class="days-grid" id="daysGrid">
-            <div class="grid-head"></div>
-            <div class="grid-head">Icona</div>
-            <div class="grid-head">Min</div>
-            <div class="grid-head">Max</div>
-            <div class="grid-head">Vento</div>
-          </div>
+          <div class="shared-grid" id="daysGrid"></div>
         </div>
       </section>
     </main>
   </div>
 
   <script>
-    const weatherData = {
-      city: 'Brescia',
-      current: {
-        condition: 'Parzialmente nuvoloso',
-        temp: 23,
-        min: 11,
-        max: 24,
-        humidity: 54,
-        moonPhase: 'Luna crescente',
-        sunrise: '06:17',
-        sunset: '19:51'
-      },
-      hourly: [
-        { time: 'Adesso', icon: 'partly-cloudy.svg', temp: 23, wind: '10 km/h' },
-        { time: '17', icon: 'partly-cloudy.svg', temp: 23, wind: '10 km/h' },
-        { time: '18', icon: 'partly-cloudy.svg', temp: 17, wind: '10 km/h' },
-        { time: '19', icon: 'cloudy-night.svg', temp: 20, wind: '10 km/h' },
-        { time: '20', icon: 'moon.svg', temp: 18, wind: '8 km/h' }
-      ],
-      daily: [
-        { day: 'Mercoledì', icon: 'partly-cloudy.svg', min: 11, max: 24, wind: '10 km/h' },
-        { day: 'Giovedì', icon: 'partly-cloudy.svg', min: 12, max: 25, wind: '11 km/h' },
-        { day: 'Venerdì', icon: 'sun.svg', min: 13, max: 27, wind: '8 km/h' },
-        { day: 'Sabato', icon: 'sun.svg', min: 14, max: 28, wind: '9 km/h' },
-        { day: 'Domenica', icon: 'partly-cloudy.svg', min: 16, max: 26, wind: '7 km/h' }
-      ]
+    const BRESCIA = {
+      lat: 45.5416,
+      lon: 10.2118,
+      tz: 'Europe/Rome'
     };
 
     const backgrounds = {
@@ -554,7 +504,56 @@
       'freddo': './images/neve.jpg'
     };
 
-    function setDate() {
+    const weatherCodeMap = {
+      0: { label: 'Sereno', iconDay: 'sun.svg', iconNight: 'moon.svg', bg: 'sereno' },
+      1: { label: 'Prevalentemente sereno', iconDay: 'sun.svg', iconNight: 'moon.svg', bg: 'sereno' },
+      2: { label: 'Parzialmente nuvoloso', iconDay: 'partly-cloudy.svg', iconNight: 'cloudy-night.svg', bg: 'parzialmente-nuvoloso' },
+      3: { label: 'Nuvoloso', iconDay: 'cloud.svg', iconNight: 'cloudy-night.svg', bg: 'nuvoloso' },
+      45: { label: 'Nebbia', iconDay: 'cloud.svg', iconNight: 'cloudy-night.svg', bg: 'nebbia' },
+      48: { label: 'Nebbia con brina', iconDay: 'cloud.svg', iconNight: 'cloudy-night.svg', bg: 'nebbia' },
+      51: { label: 'Pioggia leggera', iconDay: 'light-rain.svg', iconNight: 'light-rain.svg', bg: 'pioggia' },
+      53: { label: 'Pioggia', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'pioggia' },
+      55: { label: 'Pioggia intensa', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'pioggia' },
+      56: { label: 'Pioggia gelata', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'freddo' },
+      57: { label: 'Pioggia gelata', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'freddo' },
+      61: { label: 'Pioggia', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'pioggia' },
+      63: { label: 'Pioggia', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'pioggia' },
+      65: { label: 'Pioggia intensa', iconDay: 'storm.svg', iconNight: 'storm.svg', bg: 'pioggia' },
+      66: { label: 'Pioggia gelata', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'freddo' },
+      67: { label: 'Pioggia gelata', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'freddo' },
+      71: { label: 'Neve', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      73: { label: 'Neve', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      75: { label: 'Neve intensa', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      77: { label: 'Nevischio', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      80: { label: 'Rovesci', iconDay: 'light-rain.svg', iconNight: 'light-rain.svg', bg: 'pioggia' },
+      81: { label: 'Rovesci', iconDay: 'rain.svg', iconNight: 'rain.svg', bg: 'pioggia' },
+      82: { label: 'Forti rovesci', iconDay: 'storm.svg', iconNight: 'storm.svg', bg: 'pioggia' },
+      85: { label: 'Rovesci di neve', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      86: { label: 'Rovesci di neve', iconDay: 'snow-flake.svg', iconNight: 'snow-flake.svg', bg: 'neve' },
+      95: { label: 'Temporale', iconDay: 'thunder.svg', iconNight: 'thunder.svg', bg: 'temporale' },
+      96: { label: 'Temporale', iconDay: 'thunder.svg', iconNight: 'thunder.svg', bg: 'temporale' },
+      99: { label: 'Temporale forte', iconDay: 'thunder.svg', iconNight: 'thunder.svg', bg: 'temporale' }
+    };
+
+    function moonPhaseName(date = new Date()) {
+      const synodicMonth = 29.53058867;
+      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
+      const days = (date.getTime() - knownNewMoon) / 86400000;
+      const phase = ((days % synodicMonth) + synodicMonth) % synodicMonth;
+      const index = Math.floor((phase / synodicMonth) * 8) % 8;
+      return [
+        'Luna nuova',
+        'Luna crescente',
+        'Primo quarto',
+        'Gibbosa crescente',
+        'Luna piena',
+        'Gibbosa calante',
+        'Ultimo quarto',
+        'Luna calante'
+      ][index];
+    }
+
+    function formatDateLine() {
       const now = new Date();
       const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
       const mesi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
@@ -563,41 +562,93 @@
       document.getElementById('dateLine').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]} · ${hh}:${mm}`;
     }
 
-    function setSunLine() {
-      const now = new Date();
-      const current = now.getHours() * 60 + now.getMinutes();
-      const [srH, srM] = weatherData.current.sunrise.split(':').map(Number);
-      const [ssH, ssM] = weatherData.current.sunset.split(':').map(Number);
-      const sunrise = srH * 60 + srM;
-      const sunset = ssH * 60 + ssM;
-      document.getElementById('sunLine').textContent = current >= sunset ? `Alba ${weatherData.current.sunrise}` : `Tramonto ${weatherData.current.sunset}`;
+    function hourLabel(date) {
+      return String(date.getHours()).padStart(2, '0');
     }
 
-    function renderCurrent() {
-      document.getElementById('currentCondition').textContent = weatherData.current.condition;
-      document.getElementById('currentTemp').textContent = `${weatherData.current.temp}°`;
-      document.getElementById('minMaxLine').textContent = `Min ${weatherData.current.min}° · Max ${weatherData.current.max}°`;
-      document.getElementById('humidityLine').textContent = `Umidità ${weatherData.current.humidity}%`;
-      document.getElementById('moonLine').textContent = weatherData.current.moonPhase;
+    function weekdayName(dateStr) {
+      const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+      const d = new Date(dateStr + 'T12:00:00');
+      return giorni[d.getDay()];
     }
 
-    function renderHours() {
+    function isNight(localHour, sunriseHour, sunsetHour) {
+      return localHour < sunriseHour || localHour >= sunsetHour;
+    }
+
+    function mapCode(code, night = false) {
+      const info = weatherCodeMap[code] || weatherCodeMap[2];
+      return {
+        label: info.label,
+        icon: night ? info.iconNight : info.iconDay,
+        bg: info.bg
+      };
+    }
+
+    function applyBackground(bgKey, now, sunrise, sunset) {
+      const bg = document.getElementById('bg');
+      const clouds = document.getElementById('bgClouds');
+      const fx = document.getElementById('bgFx');
+      const stars = document.getElementById('bgStars');
+      const shooting = document.getElementById('bgShooting');
+
+      let key = bgKey;
+      const mins = now.getHours() * 60 + now.getMinutes();
+      const sunriseM = sunrise.getHours() * 60 + sunrise.getMinutes();
+      const sunsetM = sunset.getHours() * 60 + sunset.getMinutes();
+
+      if (mins >= sunriseM - 20 && mins <= sunriseM + 35) key = 'alba';
+      if (mins >= sunsetM - 35 && mins <= sunsetM + 25) key = 'tramonto';
+
+      bg.style.backgroundImage = `url('${backgrounds[key] || backgrounds['poco-nuvoloso']}')`;
+
+      clouds.style.opacity = '0';
+      stars.style.opacity = '0';
+      shooting.style.opacity = '0';
+      fx.className = 'bg-fx';
+
+      if (key === 'parzialmente-nuvoloso' || key === 'poco-nuvoloso' || key === 'nuvoloso' || key === 'notte-nuvolosa') {
+        clouds.style.opacity = '.16';
+      }
+      if (key === 'pioggia') {
+        clouds.style.opacity = '.18';
+        fx.className = 'bg-fx rain';
+      }
+      if (key === 'temporale') {
+        clouds.style.opacity = '.20';
+        fx.className = 'bg-fx storm';
+      }
+      if (key === 'neve' || key === 'freddo') {
+        fx.className = 'bg-fx neve';
+      }
+      if (key === 'alba') fx.className = 'bg-fx sunrise';
+      if (key === 'tramonto') fx.className = 'bg-fx sunset';
+      if (key === 'notte-serena') {
+        stars.style.opacity = '.78';
+        shooting.style.opacity = '1';
+      }
+      if (key === 'notte-nuvolosa') {
+        stars.style.opacity = '.22';
+      }
+    }
+
+    function renderHours(hourlyItems) {
       const grid = document.getElementById('hoursGrid');
       grid.innerHTML = '';
-      weatherData.hourly.forEach(item => {
+      hourlyItems.forEach((item, idx) => {
         const col = document.createElement('div');
         col.className = 'hour-col';
         col.innerHTML = `
-          <div class="hour-label">${item.time}</div>
+          <div class="hour-label">${idx === 0 ? 'Adesso' : item.label}</div>
           <img src="./icons/${item.icon}" alt="">
           <div class="hour-temp">${item.temp}°</div>
-          <div class="hour-wind">${item.wind}</div>
+          <div class="hour-wind">${item.wind} km/h</div>
         `;
         grid.appendChild(col);
       });
     }
 
-    function renderDays() {
+    function renderDays(dailyItems) {
       const grid = document.getElementById('daysGrid');
       grid.innerHTML = `
         <div class="grid-head"></div>
@@ -607,101 +658,93 @@
         <div class="grid-head">Vento</div>
       `;
 
-      weatherData.daily.forEach(item => {
+      dailyItems.forEach(item => {
         grid.insertAdjacentHTML('beforeend', `
           <div class="grid-cell day-name">${item.day}</div>
           <div class="grid-cell day-icon"><img src="./icons/${item.icon}" alt=""></div>
           <div class="grid-cell">${item.min}°</div>
           <div class="grid-cell">${item.max}°</div>
-          <div class="grid-cell">${item.wind}</div>
+          <div class="grid-cell">${item.wind} km/h</div>
         `);
       });
     }
 
-    function normalize(str) {
-      return (str || '').toLowerCase();
-    }
+    async function loadWeather() {
+      formatDateLine();
+      document.getElementById('moonLine').textContent = moonPhaseName(new Date());
 
-    function chooseBackground() {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${BRESCIA.lat}&longitude=${BRESCIA.lon}&timezone=${encodeURIComponent(BRESCIA.tz)}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,wind_speed_10m_max`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Errore meteo');
+      const data = await res.json();
+
       const now = new Date();
-      const mins = now.getHours() * 60 + now.getMinutes();
-      const sunrise = 6 * 60 + 17;
-      const sunset = 19 * 60 + 51;
-      const c = normalize(weatherData.current.condition);
+      const sunrise = new Date(data.daily.sunrise[0]);
+      const sunset = new Date(data.daily.sunset[0]);
+      const currentMap = mapCode(data.current.weather_code, data.current.is_day === 0);
 
-      const bg = document.getElementById('bg');
-      const clouds = document.getElementById('bgClouds');
-      const fx = document.getElementById('bgFx');
-      const stars = document.getElementById('bgStars');
-      const shooting = document.getElementById('bgShooting');
+      document.getElementById('currentCondition').textContent = currentMap.label;
+      document.getElementById('currentTemp').textContent = `${Math.round(data.current.temperature_2m)}°`;
+      document.getElementById('minMaxLine').textContent = `Min ${Math.round(data.daily.temperature_2m_min[0])}° · Max ${Math.round(data.daily.temperature_2m_max[0])}°`;
+      document.getElementById('humidityLine').textContent = `Umidità ${Math.round(data.current.relative_humidity_2m)}%`;
+      document.getElementById('sunLine').textContent = (now >= sunset)
+        ? `Alba ${String(sunrise.getHours()).padStart(2, '0')}:${String(sunrise.getMinutes()).padStart(2, '0')}`
+        : `Tramonto ${String(sunset.getHours()).padStart(2, '0')}:${String(sunset.getMinutes()).padStart(2, '0')}`;
 
-      let img = backgrounds['poco-nuvoloso'];
-      let fxClass = '';
-      clouds.style.opacity = '0';
-      stars.style.opacity = '0';
-      shooting.style.opacity = '0';
+      applyBackground(
+        now >= sunset || now < sunrise ? (currentMap.bg === 'sereno' ? 'notte-serena' : 'notte-nuvolosa') : currentMap.bg,
+        now,
+        sunrise,
+        sunset
+      );
 
-      const isStorm = c.includes('tempor');
-      const isRain = c.includes('piogg');
-      const isFog = c.includes('nebb');
-      const isSnow = c.includes('nev');
-      const isCold = c.includes('ghiaccio') || c.includes('gel') || c.includes('fredd');
-      const isCloudy = c.includes('nuvol') && !c.includes('poco') && !c.includes('parzial');
-      const isPartly = c.includes('poco') || c.includes('parzial');
-      const isClear = c.includes('sereno') || c.includes('sole');
+      const hourlyItems = [];
+      const times = data.hourly.time.map(t => new Date(t));
+      const currentHour = now.getHours();
+      const currentDay = now.getDate();
+      let startIdx = times.findIndex(t => t.getHours() === currentHour && t.getDate() === currentDay);
+      if (startIdx < 0) startIdx = 0;
 
-      if (mins >= sunrise - 20 && mins <= sunrise + 35) {
-        img = backgrounds['alba'];
-        fxClass = 'sunrise';
-      } else if (mins >= sunset - 35 && mins <= sunset + 25) {
-        img = backgrounds['tramonto'];
-        fxClass = 'sunset';
-      } else if (mins > sunset || mins < sunrise) {
-        if (isCloudy || isRain || isStorm) {
-          img = backgrounds['notte-nuvolosa'];
-          clouds.style.opacity = '.14';
-        } else {
-          img = backgrounds['notte-serena'];
-          stars.style.opacity = '.78';
-          shooting.style.opacity = '1';
-        }
-      } else if (isFog) {
-        img = backgrounds['nebbia'];
-      } else if (isSnow || isCold) {
-        img = backgrounds['neve'];
-        fxClass = 'neve';
-      } else if (isStorm) {
-        img = backgrounds['temporale'];
-        fxClass = 'storm';
-        clouds.style.opacity = '.22';
-      } else if (isRain) {
-        img = backgrounds['pioggia'];
-        fxClass = 'rain';
-        clouds.style.opacity = '.18';
-      } else if (isCloudy) {
-        img = backgrounds['nuvoloso'];
-        clouds.style.opacity = '.20';
-      } else if (isClear) {
-        img = backgrounds['sole-sereno'];
-      } else if (isPartly) {
-        img = backgrounds['poco-nuvoloso'];
-        clouds.style.opacity = '.16';
+      for (let i = 0; i < 5; i++) {
+        const idx = Math.min(startIdx + i, times.length - 1);
+        const t = times[idx];
+        const sunriseHour = sunrise.getHours();
+        const sunsetHour = sunset.getHours();
+        const mapped = mapCode(data.hourly.weather_code[idx], isNight(t.getHours(), sunriseHour, sunsetHour));
+        hourlyItems.push({
+          label: hourLabel(t),
+          icon: mapped.icon,
+          temp: Math.round(data.hourly.temperature_2m[idx]),
+          wind: Math.round(data.hourly.wind_speed_10m[idx])
+        });
       }
+      renderHours(hourlyItems);
 
-      bg.style.backgroundImage = `url('${img}')`;
-      fx.className = 'bg-fx' + (fxClass ? ' ' + fxClass : '');
+      const dailyItems = [];
+      for (let i = 0; i < 5; i++) {
+        const mapped = mapCode(data.daily.weather_code[i], false);
+        dailyItems.push({
+          day: weekdayName(data.daily.time[i]),
+          icon: mapped.icon,
+          min: Math.round(data.daily.temperature_2m_min[i]),
+          max: Math.round(data.daily.temperature_2m_max[i]),
+          wind: Math.round(data.daily.wind_speed_10m_max[i])
+        });
+      }
+      renderDays(dailyItems);
     }
 
-    renderCurrent();
-    renderHours();
-    renderDays();
-    setDate();
-    setSunLine();
-    chooseBackground();
+    async function init() {
+      try {
+        await loadWeather();
+      } catch (e) {
+        document.getElementById('currentCondition').textContent = 'Meteo non disponibile';
+      }
+    }
 
-    setInterval(setDate, 30000);
-    setInterval(setSunLine, 60000);
-    setInterval(chooseBackground, 60000);
+    init();
+    setInterval(formatDateLine, 30000);
+    setInterval(init, 15 * 60 * 1000);
 
     (function () {
       const url = new URL(window.location.href);
