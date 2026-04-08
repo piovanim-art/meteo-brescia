@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meteo Brescia</title>
+
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
+
   <style>
     @font-face {
       font-family: 'Gotham';
@@ -24,29 +26,28 @@
 
     :root {
       --text: rgba(255,255,255,.98);
-      --muted: rgba(255,255,255,.90);
-      --soft: rgba(255,255,255,.76);
+      --muted: rgba(255,255,255,.92);
+      --soft: rgba(255,255,255,.82);
       --glass: rgba(255,255,255,.14);
-      --glass-2: rgba(255,255,255,.09);
+      --glass-2: rgba(255,255,255,.08);
       --glass-border: rgba(255,255,255,.22);
-      --line: rgba(255,255,255,.15);
-      --shadow: 0 18px 46px rgba(0,0,0,.18);
+      --line: rgba(255,255,255,.16);
+      --shadow: 0 18px 42px rgba(0,0,0,.22);
       --radius: 30px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html, body {
       margin: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: 'Gotham', sans-serif;
+      background: #0d1424;
       color: var(--text);
-      background: #355f9d;
-    }
-
-    body {
+      font-family: 'Gotham', sans-serif;
       letter-spacing: -0.02em;
     }
 
@@ -55,7 +56,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #355f9d;
+      background: #0d1424;
     }
 
     .bg {
@@ -64,25 +65,25 @@
       pointer-events: none;
       background-position: center center;
       background-repeat: no-repeat;
-      background-size: 112% auto;
-      transform: scale(1.08) translate3d(0,0,0);
-      transition: background-image .8s ease;
-      animation: skyDrift 28s ease-in-out infinite alternate;
+      background-size: cover;
+      transform: scale(1.12);
       will-change: transform, background-position;
+      transition: background-image .7s ease;
+      animation: skyDrift 24s ease-in-out infinite alternate;
     }
 
     @keyframes skyDrift {
       0% {
-        transform: scale(1.08) translate3d(-2.5%, -1.2%, 0);
-        background-position: 48% 50%;
+        transform: scale(1.12) translate3d(-3.5%, -2.2%, 0);
+        background-position: 46% 48%;
       }
       50% {
-        transform: scale(1.10) translate3d(1.8%, .8%, 0);
-        background-position: 52% 48%;
+        transform: scale(1.16) translate3d(2.6%, 1.2%, 0);
+        background-position: 54% 50%;
       }
       100% {
-        transform: scale(1.08) translate3d(-1.2%, 1.4%, 0);
-        background-position: 50% 52%;
+        transform: scale(1.13) translate3d(-1.6%, 3%, 0);
+        background-position: 50% 54%;
       }
     }
 
@@ -91,9 +92,8 @@
       inset: 0;
       pointer-events: none;
       background:
-        linear-gradient(90deg, rgba(18,30,55,.22) 0%, rgba(18,30,55,.12) 28%, rgba(18,30,55,.06) 58%, rgba(18,30,55,.06) 100%),
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0) 24%, rgba(0,0,0,.06) 100%);
-      backdrop-filter: blur(.5px);
+        linear-gradient(90deg, rgba(8,14,28,.42) 0%, rgba(8,14,28,.22) 28%, rgba(8,14,28,.10) 58%, rgba(8,14,28,.12) 100%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0) 24%, rgba(0,0,0,.10) 100%);
     }
 
     .layout {
@@ -102,222 +102,305 @@
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: 30% 70%;
-      padding: 28px 34px 34px 34px;
-      gap: 18px;
-      align-items: start;
+      grid-template-columns: 36% 64%;
+      padding: 44px 56px;
+      gap: 22px;
+      align-items: center;
     }
 
     .left {
-      padding-right: 14px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      min-width: 0;
-      padding-top: 6px;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 520px;
+      padding-right: 12px;
     }
 
     .city {
       margin: 0;
-      font-size: clamp(62px, 5.5vw, 104px);
-      line-height: .92;
+      font-size: clamp(74px, 6vw, 126px);
+      line-height: .9;
       font-weight: 700;
-      text-shadow: 0 2px 10px rgba(0,0,0,.18);
+      text-shadow: 0 4px 18px rgba(0,0,0,.22);
     }
 
     .condition {
-      margin-top: 16px;
-      font-size: clamp(22px, 1.9vw, 38px);
+      margin-top: 22px;
+      font-size: clamp(26px, 2.1vw, 40px);
       color: var(--muted);
-      text-shadow: 0 2px 8px rgba(0,0,0,.16);
+      text-shadow: 0 2px 10px rgba(0,0,0,.18);
     }
 
     .date {
-      margin-top: 10px;
-      font-size: clamp(18px, 1.35vw, 27px);
+      margin-top: 12px;
+      font-size: clamp(20px, 1.45vw, 28px);
       color: var(--soft);
-      text-shadow: 0 2px 8px rgba(0,0,0,.12);
+      text-shadow: 0 2px 10px rgba(0,0,0,.15);
     }
 
     .temp {
-      margin-top: 22px;
-      font-size: clamp(160px, 14vw, 245px);
-      line-height: .82;
-      letter-spacing: -0.09em;
+      margin-top: 26px;
+      font-size: clamp(180px, 15vw, 285px);
+      line-height: .8;
       font-weight: 400;
-      text-shadow: 0 4px 18px rgba(0,0,0,.10);
+      letter-spacing: -0.08em;
+      text-shadow: 0 6px 20px rgba(0,0,0,.16);
     }
 
-    .meta {
-      margin-top: 10px;
-      font-size: clamp(24px, 1.8vw, 34px);
+    .metric-line {
+      margin-top: 16px;
+      font-size: clamp(30px, 2vw, 40px);
       color: var(--muted);
-      text-shadow: 0 2px 8px rgba(0,0,0,.14);
+      text-shadow: 0 2px 8px rgba(0,0,0,.12);
     }
 
-    .meta.small {
-      margin-top: 8px;
-      font-size: clamp(20px, 1.45vw, 27px);
-    }
-
-    .moon-block {
-      margin-top: 22px;
+    .left-list {
+      margin-top: 26px;
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-width: 340px;
+      gap: 14px;
     }
 
-    .moon-line,
-    .sun-line {
+    .left-item {
       display: flex;
       align-items: center;
       gap: 16px;
+      font-size: clamp(21px, 1.55vw, 30px);
       color: var(--muted);
-      font-size: clamp(21px, 1.6vw, 29px);
       text-shadow: 0 2px 8px rgba(0,0,0,.14);
+      padding-top: 2px;
     }
 
-    .moon-line img,
-    .sun-line img,
-    .hour-col img,
-    .day-icon img {
-      filter: brightness(0) invert(1) drop-shadow(0 3px 8px rgba(0,0,0,.12));
-    }
-
-    .moon-line img {
-      width: 62px;
-      height: 62px;
+    .left-item img {
+      width: 38px;
+      height: 38px;
       object-fit: contain;
-      display: block;
+      flex: 0 0 auto;
+      filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.12));
     }
 
-    .sun-line img {
-      width: 26px;
-      height: 26px;
-      object-fit: contain;
-      display: block;
+    .left-item.zodiac {
+      padding-top: 6px;
+    }
+
+    .left-item .zodiac-symbol {
+      width: 38px;
+      text-align: center;
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,.22), rgba(255,255,255,.05));
+      margin: 2px 0 0;
     }
 
     .right {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      justify-content: flex-start;
-      min-width: 0;
-      padding-top: 0;
+      justify-content: flex-end;
+      gap: 16px;
+      padding-top: 26px;
+      padding-bottom: 18px;
     }
 
     .card {
-      width: 100%;
       position: relative;
+      width: 100%;
       overflow: hidden;
       border-radius: var(--radius);
       background: linear-gradient(180deg, var(--glass), var(--glass-2));
       border: 1px solid var(--glass-border);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(16px) saturate(115%);
-      -webkit-backdrop-filter: blur(16px) saturate(115%);
+      backdrop-filter: blur(14px) saturate(112%);
+      -webkit-backdrop-filter: blur(14px) saturate(112%);
     }
 
     .card::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,0) 38%);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 40%);
       pointer-events: none;
     }
 
     .hours-card,
     .days-card {
-      padding: 18px 22px 18px;
+      padding: 18px 22px;
     }
 
-    .shared-grid {
+    .hours-grid {
       display: grid;
-      grid-template-columns: 1.45fr .72fr .72fr .72fr .95fr;
+      grid-template-columns: repeat(5, 1fr);
       gap: 0;
-      align-items: stretch;
-    }
-
-    .hour-col,
-    .grid-head,
-    .grid-cell {
-      min-width: 0;
-      text-align: center;
-      padding: 8px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      align-items: start;
     }
 
     .hour-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: flex-start;
+      padding: 6px 10px 4px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hour-col + .hour-col::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 34px;
+      bottom: 10px;
+      width: 1px;
+      background: rgba(255,255,255,.10);
     }
 
     .hour-label {
-      font-size: clamp(18px, 1.4vw, 27px);
+      font-size: clamp(18px, 1.3vw, 28px);
       color: var(--muted);
-      margin-bottom: 12px;
-      width: 100%;
+      margin-bottom: 14px;
     }
 
-    .hour-col img {
-      width: 44px;
-      height: 44px;
+    .hour-icon img {
+      width: 48px;
+      height: 48px;
       object-fit: contain;
-      display: block;
-      margin-bottom: 10px;
+      filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.12));
     }
 
     .hour-temp {
-      font-size: clamp(26px, 2vw, 38px);
-      color: var(--muted);
+      margin-top: 12px;
+      font-size: clamp(28px, 2vw, 40px);
       line-height: 1;
-      margin-bottom: 10px;
+      color: var(--muted);
     }
 
     .hour-wind {
-      font-size: clamp(15px, 1.1vw, 21px);
-      color: rgba(255,255,255,.76);
+      margin-top: 10px;
+      font-size: clamp(15px, 1.05vw, 20px);
+      color: rgba(255,255,255,.80);
       white-space: nowrap;
     }
 
-    .grid-head {
-      font-size: clamp(18px, 1.35vw, 24px);
-      color: var(--muted);
-      padding-bottom: 14px;
-      flex-direction: row;
+    .days-grid {
+      display: grid;
+      grid-template-columns: 1.55fr .8fr .7fr .7fr .9fr;
+      align-items: stretch;
     }
 
-    .grid-cell {
-      min-height: 52px;
-      border-top: 1px solid var(--line);
-      font-size: clamp(19px, 1.4vw, 27px);
+    .days-head {
+      font-size: clamp(18px, 1.25vw, 24px);
       color: var(--muted);
-      flex-direction: row;
+      text-align: center;
+      padding: 6px 8px 14px;
+    }
+
+    .days-head.left-empty,
+    .days-head.icon-empty {
+      color: transparent;
+      user-select: none;
+    }
+
+    .day-cell {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid var(--line);
+      font-size: clamp(19px, 1.35vw, 27px);
+      color: var(--muted);
+      padding: 8px 10px;
     }
 
     .day-name {
       justify-content: flex-start;
-      padding-left: 8px;
+      padding-left: 14px;
+      text-align: left;
     }
 
     .day-icon img {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
-      display: block;
-      margin: 0 auto;
+      filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.12));
     }
 
-    @media (max-aspect-ratio: 1/1) {
+    @media (orientation: portrait) {
       .layout {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
+        padding: 36px 34px;
+        gap: 24px;
         align-items: start;
-        overflow-y: auto;
+      }
+
+      .left {
+        max-width: none;
+        padding-right: 0;
+      }
+
+      .right {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .city {
+        font-size: clamp(64px, 8vw, 104px);
+      }
+
+      .condition {
+        font-size: clamp(24px, 3vw, 38px);
+      }
+
+      .date {
+        font-size: clamp(18px, 2vw, 28px);
+      }
+
+      .temp {
+        font-size: clamp(150px, 19vw, 250px);
+      }
+
+      .metric-line {
+        font-size: clamp(28px, 3vw, 42px);
+      }
+
+      .left-item {
+        font-size: clamp(22px, 2.4vw, 32px);
+      }
+
+      .hours-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .hour-label {
+        font-size: clamp(17px, 2vw, 24px);
+      }
+
+      .hour-temp {
+        font-size: clamp(26px, 3vw, 36px);
+      }
+
+      .hour-wind {
+        font-size: clamp(14px, 1.7vw, 20px);
+      }
+
+      .days-grid {
+        grid-template-columns: 1.25fr .7fr .7fr .7fr .8fr;
+      }
+
+      .days-head {
+        font-size: clamp(17px, 1.8vw, 23px);
+      }
+
+      .day-cell {
+        font-size: clamp(18px, 2vw, 24px);
+        min-height: 54px;
       }
     }
   </style>
@@ -330,31 +413,55 @@
     <main class="layout">
       <section class="left">
         <h1 class="city">Brescia</h1>
-        <div class="condition" id="currentCondition">Caricamento…</div>
-        <div class="date" id="dateLine"></div>
-        <div class="temp" id="currentTemp">--°</div>
-        <div class="meta" id="minMaxLine">Min --° · Max --°</div>
-        <div class="meta small" id="humidityLine">Umidità --%</div>
 
-        <div class="moon-block">
-          <div class="moon-line">
-            <img src="./icons/moon.svg" alt="Luna" />
+        <div class="condition" id="currentCondition">Caricamento…</div>
+        <div class="date" id="dateLine">—</div>
+
+        <div class="temp" id="currentTemp">--°</div>
+
+        <div class="metric-line" id="minMaxLine">Min --° · Max --°</div>
+
+        <div class="left-list">
+          <div class="divider"></div>
+
+          <div class="left-item">
+            <img src="./icons/rain.svg" alt="">
+            <span id="humidityLine">Umidità --%</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="left-item">
+            <img src="./icons/sun.svg" alt="">
+            <span id="sunriseLine">Alba --:--</span>
+          </div>
+
+          <div class="left-item">
+            <img src="./icons/sun.svg" alt="">
+            <span id="sunsetLine">Tramonto --:--</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="left-item">
+            <img src="./icons/moon.svg" alt="">
             <span id="moonLine">Fase lunare</span>
           </div>
-          <div class="sun-line">
-            <img src="./icons/sun.svg" alt="Sole" />
-            <span id="sunLine">Alba / Tramonto</span>
+
+          <div class="left-item zodiac">
+            <span class="zodiac-symbol" id="zodiacSymbol">♈</span>
+            <span id="zodiacName">Ariete</span>
           </div>
         </div>
       </section>
 
       <section class="right">
         <div class="card hours-card">
-          <div class="shared-grid" id="hoursGrid"></div>
+          <div class="hours-grid" id="hoursGrid"></div>
         </div>
 
         <div class="card days-card">
-          <div class="shared-grid" id="daysGrid"></div>
+          <div class="days-grid" id="daysGrid"></div>
         </div>
       </section>
     </main>
@@ -368,19 +475,19 @@
     };
 
     const backgrounds = {
-      'sereno': './images/sole-sereno.jpg',
+      sereno: './images/sole-sereno.jpg',
       'poco-nuvoloso': './images/poco-nuvoloso.jpg',
       'parzialmente-nuvoloso': './images/poco-nuvoloso.jpg',
-      'nuvoloso': './images/nuvoloso.jpg',
-      'pioggia': './images/pioggia.jpg',
-      'temporale': './images/temporale.jpg',
+      nuvoloso: './images/nuvoloso.jpg',
+      pioggia: './images/pioggia.jpg',
+      temporale: './images/temporale.jpg',
       'notte-serena': './images/notte-serena.jpg',
       'notte-nuvolosa': './images/notte-nuvolosa.jpg',
-      'tramonto': './images/tramonto.jpg',
-      'alba': './images/alba.jpg',
-      'nebbia': './images/nebbia.jpg',
-      'neve': './images/neve.jpg',
-      'freddo': './images/neve.jpg'
+      tramonto: './images/tramonto.jpg',
+      alba: './images/alba.jpg',
+      nebbia: './images/nebbia.jpg',
+      neve: './images/neve.jpg',
+      freddo: './images/neve.jpg'
     };
 
     const weatherCodeMap = {
@@ -432,16 +539,47 @@
       ][index];
     }
 
+    function zodiacForDate(date = new Date()) {
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+
+      const zodiacs = [
+        { start: [3, 21], end: [4, 19], symbol: '♈', name: 'Ariete' },
+        { start: [4, 20], end: [5, 20], symbol: '♉', name: 'Toro' },
+        { start: [5, 21], end: [6, 20], symbol: '♊', name: 'Gemelli' },
+        { start: [6, 21], end: [7, 22], symbol: '♋', name: 'Cancro' },
+        { start: [7, 23], end: [8, 22], symbol: '♌', name: 'Leone' },
+        { start: [8, 23], end: [9, 22], symbol: '♍', name: 'Vergine' },
+        { start: [9, 23], end: [10, 22], symbol: '♎', name: 'Bilancia' },
+        { start: [10, 23], end: [11, 21], symbol: '♏', name: 'Scorpione' },
+        { start: [11, 22], end: [12, 21], symbol: '♐', name: 'Sagittario' },
+        { start: [12, 22], end: [1, 19], symbol: '♑', name: 'Capricorno' },
+        { start: [1, 20], end: [2, 18], symbol: '♒', name: 'Acquario' },
+        { start: [2, 19], end: [3, 20], symbol: '♓', name: 'Pesci' }
+      ];
+
+      for (const z of zodiacs) {
+        const [sm, sd] = z.start;
+        const [em, ed] = z.end;
+
+        if (sm <= em) {
+          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm && m < em)) return z;
+        } else {
+          if ((m === sm && d >= sd) || (m === em && d <= ed) || m > sm || m < em) return z;
+        }
+      }
+
+      return { symbol: '♈', name: 'Ariete' };
+    }
+
     function formatDateLine() {
       const now = new Date();
       const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
       const mesi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('dateLine').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]} · ${hh}:${mm}`;
+      document.getElementById('dateLine').textContent = `${giorni[now.getDay()]} ${now.getDate()} ${mesi[now.getMonth()]}`;
     }
 
-    function hourLabel(date) {
+    function formatHour(date) {
       return String(date.getHours()).padStart(2, '0');
     }
 
@@ -472,8 +610,8 @@
       const sunriseM = sunrise.getHours() * 60 + sunrise.getMinutes();
       const sunsetM = sunset.getHours() * 60 + sunset.getMinutes();
 
-      if (mins >= sunriseM - 20 && mins <= sunriseM + 35) key = 'alba';
-      if (mins >= sunsetM - 35 && mins <= sunsetM + 25) key = 'tramonto';
+      if (mins >= sunriseM - 25 && mins <= sunriseM + 35) key = 'alba';
+      if (mins >= sunsetM - 40 && mins <= sunsetM + 25) key = 'tramonto';
 
       bg.style.backgroundImage = `url('${backgrounds[key] || backgrounds['poco-nuvoloso']}')`;
     }
@@ -482,12 +620,12 @@
       const grid = document.getElementById('hoursGrid');
       grid.innerHTML = '';
 
-      hourlyItems.forEach((item, idx) => {
+      hourlyItems.forEach((item, index) => {
         const col = document.createElement('div');
         col.className = 'hour-col';
         col.innerHTML = `
-          <div class="hour-label">${idx === 0 ? 'Adesso' : item.label}</div>
-          <img src="./icons/${item.icon}" alt="">
+          <div class="hour-label">${index === 0 ? 'Adesso' : item.label}</div>
+          <div class="hour-icon"><img src="./icons/${item.icon}" alt=""></div>
           <div class="hour-temp">${item.temp}°</div>
           <div class="hour-wind">${item.wind} km/h</div>
         `;
@@ -498,31 +636,37 @@
     function renderDays(dailyItems) {
       const grid = document.getElementById('daysGrid');
       grid.innerHTML = `
-        <div class="grid-head"></div>
-        <div class="grid-head"></div>
-        <div class="grid-head">Min</div>
-        <div class="grid-head">Max</div>
-        <div class="grid-head">Vento</div>
+        <div class="days-head left-empty">.</div>
+        <div class="days-head icon-empty">.</div>
+        <div class="days-head">Min</div>
+        <div class="days-head">Max</div>
+        <div class="days-head">Vento</div>
       `;
 
       dailyItems.forEach(item => {
         grid.insertAdjacentHTML('beforeend', `
-          <div class="grid-cell day-name">${item.day}</div>
-          <div class="grid-cell day-icon"><img src="./icons/${item.icon}" alt=""></div>
-          <div class="grid-cell">${item.min}°</div>
-          <div class="grid-cell">${item.max}°</div>
-          <div class="grid-cell">${item.wind} km/h</div>
+          <div class="day-cell day-name">${item.day}</div>
+          <div class="day-cell day-icon"><img src="./icons/${item.icon}" alt=""></div>
+          <div class="day-cell">${item.min}°</div>
+          <div class="day-cell">${item.max}°</div>
+          <div class="day-cell">${item.wind} km/h</div>
         `);
       });
     }
 
     async function loadWeather() {
       formatDateLine();
+
+      const zodiac = zodiacForDate(new Date());
+      document.getElementById('zodiacSymbol').textContent = zodiac.symbol;
+      document.getElementById('zodiacName').textContent = zodiac.name;
       document.getElementById('moonLine').textContent = moonPhaseName(new Date());
 
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${BRESCIA.lat}&longitude=${BRESCIA.lon}&timezone=${encodeURIComponent(BRESCIA.tz)}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,wind_speed_10m_max`;
+
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error('Errore meteo');
+
       const data = await res.json();
 
       const now = new Date();
@@ -534,11 +678,8 @@
       document.getElementById('currentTemp').textContent = `${Math.round(data.current.temperature_2m)}°`;
       document.getElementById('minMaxLine').textContent = `Min ${Math.round(data.daily.temperature_2m_min[0])}° · Max ${Math.round(data.daily.temperature_2m_max[0])}°`;
       document.getElementById('humidityLine').textContent = `Umidità ${Math.round(data.current.relative_humidity_2m)}%`;
-
-      document.getElementById('sunLine').textContent =
-        (now >= sunset)
-          ? `Alba ${String(sunrise.getHours()).padStart(2, '0')}:${String(sunrise.getMinutes()).padStart(2, '0')}`
-          : `Tramonto ${String(sunset.getHours()).padStart(2, '0')}:${String(sunset.getMinutes()).padStart(2, '0')}`;
+      document.getElementById('sunriseLine').textContent = `Alba ${String(sunrise.getHours()).padStart(2, '0')}:${String(sunrise.getMinutes()).padStart(2, '0')}`;
+      document.getElementById('sunsetLine').textContent = `Tramonto ${String(sunset.getHours()).padStart(2, '0')}:${String(sunset.getMinutes()).padStart(2, '0')}`;
 
       applyBackground(
         now >= sunset || now < sunrise
@@ -549,27 +690,28 @@
         sunset
       );
 
-      const hourlyItems = [];
       const times = data.hourly.time.map(t => new Date(t));
       const currentHour = now.getHours();
       const currentDay = now.getDate();
+
       let startIdx = times.findIndex(t => t.getHours() === currentHour && t.getDate() === currentDay);
       if (startIdx < 0) startIdx = 0;
 
+      const hourlyItems = [];
       for (let i = 0; i < 5; i++) {
         const idx = Math.min(startIdx + i, times.length - 1);
         const t = times[idx];
         const sunriseHour = sunrise.getHours();
         const sunsetHour = sunset.getHours();
         const mapped = mapCode(data.hourly.weather_code[idx], isNight(t.getHours(), sunriseHour, sunsetHour));
+
         hourlyItems.push({
-          label: hourLabel(t),
+          label: formatHour(t),
           icon: mapped.icon,
           temp: Math.round(data.hourly.temperature_2m[idx]),
           wind: Math.round(data.hourly.wind_speed_10m[idx])
         });
       }
-
       renderHours(hourlyItems);
 
       const dailyItems = [];
@@ -583,7 +725,6 @@
           wind: Math.round(data.daily.wind_speed_10m_max[i])
         });
       }
-
       renderDays(dailyItems);
     }
 
@@ -596,7 +737,6 @@
     }
 
     init();
-    setInterval(formatDateLine, 30000);
     setInterval(init, 10 * 60 * 1000);
 
     (function () {
