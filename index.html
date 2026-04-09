@@ -1,708 +1,487 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meteo Brescia</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virgin Active Brescia News</title>
 
   <style>
     @font-face {
-      font-family: 'Gotham';
-      src: url('./fonts/Gotham-Book.otf') format('opentype');
+      font-family: "Gotham";
+      src: url("./fonts/Gotham-Black.otf") format("opentype");
+      font-weight: 900;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Gotham";
+      src: url("./fonts/Gotham-Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Gotham";
+      src: url("./fonts/Gotham-Book.otf") format("opentype");
       font-weight: 400;
       font-style: normal;
     }
 
     @font-face {
-      font-family: 'Gotham';
-      src: url('./fonts/Gotham-Bold.otf') format('opentype');
-      font-weight: 700;
+      font-family: "GothamXLight";
+      src: url("./fonts/Gotham-XLight.otf") format("opentype");
+      font-weight: 200;
       font-style: normal;
     }
 
     :root {
-      --text: rgba(255,255,255,0.98);
-      --muted: rgba(255,255,255,0.92);
-      --soft: rgba(255,255,255,0.82);
-      --glass: rgba(255,255,255,0.11);
-      --glass-2: rgba(255,255,255,0.06);
-      --glass-border: rgba(255,255,255,0.18);
-      --line: rgba(255,255,255,0.14);
-      --shadow: 0 18px 42px rgba(0,0,0,0.20);
-      --radius: 28px;
-    }
-
-    * {
-      box-sizing: border-box;
+      --va-red: #e30613;
+      --bg: #000000;
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.22);
     }
 
     html, body {
+      margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
-      margin: 0;
       overflow: hidden;
-      background: #09111f;
-      font-family: 'Gotham', Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      font-family: "Gotham", Arial, sans-serif;
     }
 
     body {
-      aspect-ratio: 16 / 9;
+      background: var(--bg);
     }
 
-    .app {
+    .splash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: rgba(255,255,255,0.9);
+      font-family: "GothamXLight", Arial, sans-serif;
+      font-weight: 200;
+      font-size: clamp(140px, 11vw, 200px);
+      letter-spacing: 0.18em;
+      z-index: 20;
+      opacity: 1;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .splash.hide {
+      opacity: 0;
+    }
+
+    .container {
       position: relative;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
-      background: #09111f;
+      box-sizing: border-box;
+      padding: 90px 120px 70px 120px;
+      background: #000;
     }
 
-    .bg {
-      position: absolute;
-      inset: -4%;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      will-change: transform;
-      animation: bgMove 34s ease-in-out infinite alternate;
-      z-index: 0;
-      transform: scale(1.08);
-    }
-
-    @keyframes bgMove {
-      0%   { transform: scale(1.08) translate3d(0%, 0%, 0); }
-      50%  { transform: scale(1.13) translate3d(-2.2%, -1.3%, 0); }
-      100% { transform: scale(1.10) translate3d(1.8%, 1.4%, 0); }
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(6,10,18,0.22) 0%, rgba(6,10,18,0.10) 28%, rgba(6,10,18,0.02) 60%, rgba(6,10,18,0.03) 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.08) 100%);
-    }
-
-    .stage {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: 35% 65%;
-      padding: 4vh 3vw;
-      gap: 1.5vw;
-      align-items: center;
-    }
-
-    .left {
+    .top-row {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-start;
-      padding-left: 0.8vw;
-      max-width: 34vw;
+      gap: 40px;
+      width: 100%;
     }
 
-    .city {
-      margin: 0;
-      font-size: clamp(72px, 5.7vw, 122px);
-      line-height: 0.9;
+    .left-top {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding-right: 40px;
+    }
+
+    .brand {
+      color: var(--va-red);
+      font-size: 34px;
       font-weight: 700;
-      letter-spacing: -0.05em;
-      text-shadow: 0 3px 14px rgba(0,0,0,0.16);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.95;
+      margin-bottom: 28px;
+      line-height: 1;
     }
 
-    .condition {
-      margin-top: 2.2vh;
-      font-size: clamp(26px, 2vw, 40px);
-      color: var(--muted);
-      line-height: 1.18;
+    .title-wrap {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .title {
+      font-size: 90px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      transform: translateY(18px);
+      opacity: 0;
+      will-change: transform, opacity;
+      mask-image: linear-gradient(to right, black 88%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+    }
+
+    .title.show {
+      animation: titleIn 0.45s cubic-bezier(.22,.8,.2,1) forwards;
+    }
+
+    @keyframes titleIn {
+      from {
+        transform: translateY(18px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .right-top {
+      flex: 0 0 auto;
+      text-align: right;
+      min-width: 320px;
     }
 
     .date {
-      margin-top: 1.2vh;
-      font-size: clamp(18px, 1.35vw, 27px);
-      color: var(--soft);
-      line-height: 1.2;
-    }
-
-    .temp-main {
-      margin-top: 2.2vh;
-      font-size: clamp(170px, 13.8vw, 275px);
-      line-height: 0.82;
-      font-weight: 400;
-      letter-spacing: -0.09em;
-      text-shadow: 0 5px 18px rgba(0,0,0,0.14);
-    }
-
-    .minmax-line {
-      margin-top: 0.9vh;
-      font-size: clamp(28px, 1.9vw, 39px);
-      color: var(--muted);
-      line-height: 1.15;
-    }
-
-    .left-list {
-      margin-top: 2vh;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85vh;
-    }
-
-    .left-item {
-      display: grid;
-      grid-template-columns: 32px auto;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: clamp(21px, 1.45vw, 29px);
-      line-height: 1.2;
-    }
-
-    .left-item img {
-      width: 26px;
-      height: 26px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-      filter: brightness(0) invert(1);
-      opacity: 0.96;
-    }
-
-    .left-item.zodiac {
-      grid-template-columns: 32px auto;
-    }
-
-    .zodiac-symbol {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
-      font-size: 28px;
+      color: var(--va-red);
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       line-height: 1;
-      color: var(--muted);
+      margin-bottom: 16px;
+      opacity: 0.95;
     }
 
-    .right {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 2.2vh;
-      padding-top: 11vh;
-      padding-bottom: 3vh;
-      padding-right: 0.8vw;
+    .time {
+      color: #fff;
+      font-size: 90px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      margin: 0;
     }
 
-    .card {
-      width: 89%;
-      margin-left: auto;
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, var(--glass), var(--glass-2));
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px) saturate(110%);
-      -webkit-backdrop-filter: blur(14px) saturate(110%);
+    .line {
+      width: 100%;
+      height: 5px;
+      background: #9e1116;
+      margin: 26px 0 34px 0;
+      position: relative;
       overflow: hidden;
-      position: relative;
+      border-radius: 999px;
     }
 
-    .card::before {
+    .line::after {
       content: "";
       position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01) 40%, rgba(255,255,255,0.00) 100%);
+      top: 50%;
+      left: -220px;
+      transform: translateY(-50%);
+      width: 220px;
+      height: 8px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.05) 20%,
+        rgba(255,255,255,0.25) 40%,
+        rgba(255,255,255,0.8) 65%,
+        rgba(255,255,255,1) 75%,
+        rgba(255,255,255,0.4) 85%,
+        transparent 100%
+      );
+      border-radius: 999px;
+      box-shadow:
+        0 0 4px rgba(255,255,255,0.6),
+        0 0 10px rgba(255,255,255,0.4),
+        0 0 18px rgba(227,6,19,0.3);
+      opacity: 0;
     }
 
-    .hours-card {
-      padding: 2.1vh 1.3vw 1.9vh;
+    .line.play::after {
+      animation: disney 1.4s ease-out forwards;
     }
 
-    .days-card {
-      padding: 2.1vh 1.2vw 1.7vh;
+    @keyframes disney {
+      0% { left: -220px; opacity: 0; }
+      12% { opacity: 1; }
+      80% { left: 100%; opacity: 1; }
+      100% { opacity: 0; }
     }
 
-    /* TOP 5 */
-    .hours-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: start;
-      justify-items: center;
-      column-gap: 0;
-      text-align: center;
-    }
-
-    .hour-col {
+    .description {
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      position: relative;
-      padding: 0 0.2vw;
+      max-width: 100%;
+      opacity: 0;
+      transform: translateY(10px);
+      white-space: normal;
+      word-break: break-word;
     }
 
-    .hour-col + .hour-col::before {
-      content: "";
+    .description.show {
+      animation: descriptionIn 0.38s ease forwards;
+    }
+
+    @keyframes descriptionIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .footer {
       position: absolute;
-      left: 0;
-      top: 2.8vh;
-      bottom: 0.7vh;
-      width: 1px;
-      background: rgba(255,255,255,0.08);
-    }
-
-    .hour-label {
-      font-size: clamp(18px, 1.25vw, 27px);
+      right: 40px;
+      bottom: 20px;
+      font-size: 18px;
+      font-weight: 400;
       color: var(--muted);
-      margin-bottom: 1.1vh;
-      min-height: 1.4em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .hour-icon img {
-      width: 46px;
-      height: 46px;
-      object-fit: contain;
-      display: block;
-      filter: brightness(0) invert(1);
+    @media (max-width: 1600px) {
+      .brand,
+      .date {
+        font-size: 30px;
+      }
+
+      .title,
+      .time {
+        font-size: 80px;
+      }
+
+      .description {
+        font-size: 46px;
+      }
+
+      .right-top {
+        min-width: 280px;
+      }
     }
 
-    .hour-temp {
-      margin-top: 1.1vh;
-      font-size: clamp(28px, 2vw, 40px);
-      line-height: 1;
-      color: var(--muted);
-      min-height: 1.1em;
-    }
+    @media (orientation: portrait) {
+      .container {
+        padding: 70px 50px 60px 50px;
+      }
 
-    .hour-wind {
-      margin-top: 0.9vh;
-      font-size: clamp(14px, 0.98vw, 18px);
-      line-height: 1;
-      color: rgba(255,255,255,0.78);
-      min-height: 1.1em;
-      white-space: nowrap;
-    }
+      .top-row {
+        gap: 20px;
+      }
 
-    /* BOTTOM 5 COLS PERFECT */
-    .days-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1.35fr;
-      align-items: center;
-      width: 100%;
-    }
+      .brand,
+      .date {
+        font-size: 20px;
+      }
 
-    .days-head {
-      padding: 0.2vh 0.5vw 1.25vh;
-      font-size: clamp(18px, 1.2vw, 24px);
-      color: var(--muted);
-      text-align: center;
-    }
+      .title,
+      .time {
+        font-size: 56px;
+      }
 
-    .days-head.left-empty,
-    .days-head.icon-empty {
-      color: transparent;
-      user-select: none;
-    }
+      .right-top {
+        min-width: 180px;
+      }
 
-    .day-cell {
-      min-height: 5.1vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.65vh 0.5vw;
-      border-top: 1px solid var(--line);
-      font-size: clamp(19px, 1.3vw, 27px);
-      color: var(--muted);
-      line-height: 1;
-    }
-
-    .day-name {
-      justify-content: flex-start;
-      text-align: left;
-      padding-left: 1vw;
-    }
-
-    .day-icon img {
-      width: 30px;
-      height: 30px;
-      object-fit: contain;
-      display: block;
-      filter: brightness(0) invert(1);
-    }
-
-    .status {
-      position: absolute;
-      right: 1vw;
-      bottom: 0.8vh;
-      z-index: 3;
-      font-size: 10px;
-      color: rgba(255,255,255,0.0);
-      user-select: none;
-      pointer-events: none;
+      .description {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="app">
-    <div class="bg" id="bg"></div>
-    <div class="overlay"></div>
+  <div class="splash" id="splash">CIAO</div>
 
-    <div class="stage">
-      <section class="left">
-        <h1 class="city">Brescia</h1>
-        <div class="condition" id="currentCondition">Caricamento…</div>
-        <div class="date" id="dateLine">—</div>
-
-        <div class="temp-main" id="currentTemp">--°</div>
-        <div class="minmax-line" id="minMaxLine">Min --° · Max --°</div>
-
-        <div class="left-list">
-          <div class="left-item">
-            <img src="./icons/thermometer.svg" alt="">
-            <span id="feelsLikeLine">Percepita --°</span>
-          </div>
-
-          <div class="left-item">
-            <img src="./icons/droplet.svg" alt="">
-            <span id="humidityLine">Umidità --%</span>
-          </div>
-
-          <div class="left-item">
-            <img src="./icons/sunrise.svg" alt="">
-            <span id="sunriseLine">Alba --:--</span>
-          </div>
-
-          <div class="left-item">
-            <img src="./icons/sunset.svg" alt="">
-            <span id="sunsetLine">Tramonto --:--</span>
-          </div>
-
-          <div class="left-item">
-            <img src="./icons/moon.svg" alt="">
-            <span id="moonLine">Fase lunare</span>
-          </div>
-
-          <div class="left-item zodiac">
-            <span class="zodiac-symbol" id="zodiacSymbol">♈</span>
-            <span id="zodiacName">Ariete</span>
-          </div>
-
-          <div class="left-item">
-            <img src="./icons/wind.svg" alt="">
-            <span id="airLine">Aria: Buona</span>
-          </div>
+  <div class="container">
+    <div class="top-row">
+      <div class="left-top">
+        <div class="brand">VIRGIN ACTIVE BRESCIA</div>
+        <div class="title-wrap">
+          <div class="title" id="title"></div>
         </div>
-      </section>
+      </div>
 
-      <section class="right">
-        <div class="card hours-card">
-          <div class="hours-grid" id="hoursGrid"></div>
-        </div>
-
-        <div class="card days-card">
-          <div class="days-grid" id="daysGrid"></div>
-        </div>
-      </section>
+      <div class="right-top">
+        <div class="date" id="dateText"></div>
+        <div class="time" id="timeText"></div>
+      </div>
     </div>
 
-    <div class="status">live</div>
+    <div class="line" id="line"></div>
+
+    <div class="description" id="description"></div>
+
+    <div class="footer">Club News</div>
   </div>
 
   <script>
-    const BRESCIA = {
-      lat: 45.5416,
-      lon: 10.2118,
-      tz: 'Europe/Rome'
-    };
+    const API_URL = "https://script.google.com/macros/s/AKfycbybpwUuhjoKeGN5Lu57HgkAw3e5xfGGQ1HkZdj8D2RQ7rnjTUByejbVVfnKnQa31Hvj/exec";
+    const CACHE_KEY = "news_cache_va_brescia";
+    const MIN_TIME = 6000;
+    const MAX_TIME = 12000;
 
-    const backgrounds = {
-      sereno: './images/sole-sereno.jpg',
-      pocoNuvoloso: './images/poco-nuvoloso.jpg',
-      nuvoloso: './images/nuvoloso.jpg',
-      pioggia: './images/pioggia.jpg',
-      temporale: './images/temporale.jpg',
-      notteSerena: './images/notte-serena.jpg',
-      notteNuvolosa: './images/notte-nuvolosa.jpg',
-      alba: './images/alba.jpg',
-      tramonto: './images/tramonto.jpg',
-      nebbia: './images/nebbia.jpg',
-      neve: './images/neve.jpg'
-    };
+    let news = [];
+    let current = 0;
+    let rotateTimeout = null;
+    let splashHidden = false;
 
-    function pad(num) {
-      return String(num).padStart(2, '0');
+    const fallback = [{
+      title: "Benvenuto",
+      description: "Virgin Active Brescia"
+    }];
+
+    const MONTHS_IT = [
+      "GENNAIO", "FEBBRAIO", "MARZO", "APRILE", "MAGGIO", "GIUGNO",
+      "LUGLIO", "AGOSTO", "SETTEMBRE", "OTTOBRE", "NOVEMBRE", "DICEMBRE"
+    ];
+
+    function calcTime(text) {
+      const plain = (text || "").replace(/<br\s*\/?>/gi, " ");
+      return Math.max(MIN_TIME, Math.min(MIN_TIME + plain.length * 35, MAX_TIME));
     }
 
-    function formatDateItalian(date) {
-      const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-      const mesi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-      return `${giorni[date.getDay()]} ${date.getDate()} ${mesi[date.getMonth()]}`;
+    function formatDateTime() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const month = MONTHS_IT[now.getMonth()];
+      const yyyy = now.getFullYear();
+
+      document.getElementById("timeText").textContent = `${hh}:${mm}`;
+      document.getElementById("dateText").textContent = `${dd} ${month} ${yyyy}`;
     }
 
-    function formatHour(date) {
-      return pad(date.getHours());
+    function hideSplash(delay = 0) {
+      if (splashHidden) return;
+      setTimeout(() => {
+        if (splashHidden) return;
+        splashHidden = true;
+        document.getElementById("splash").classList.add("hide");
+      }, delay);
     }
 
-    function weekdayName(dateString) {
-      const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-      const d = new Date(dateString + 'T12:00:00');
-      return giorni[d.getDay()];
+    function resetAnim() {
+      const titleEl = document.getElementById("title");
+      const descEl = document.getElementById("description");
+      const lineEl = document.getElementById("line");
+
+      titleEl.classList.remove("show");
+      descEl.classList.remove("show");
+      lineEl.classList.remove("play");
+
+      void lineEl.offsetWidth;
     }
 
-    function moonPhaseName(date = new Date()) {
-      const synodicMonth = 29.53058867;
-      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
-      const days = (date.getTime() - knownNewMoon) / 86400000;
-      const phase = ((days % synodicMonth) + synodicMonth) % synodicMonth;
-      const index = Math.floor((phase / synodicMonth) * 8) % 8;
+    function playAnim() {
+      const titleEl = document.getElementById("title");
+      const descEl = document.getElementById("description");
+      const lineEl = document.getElementById("line");
 
-      return [
-        'Luna nuova',
-        'Luna crescente',
-        'Primo quarto',
-        'Gibbosa crescente',
-        'Luna piena',
-        'Gibbosa calante',
-        'Ultimo quarto',
-        'Luna calante'
-      ][index];
+      titleEl.classList.add("show");
+
+      setTimeout(() => {
+        lineEl.classList.add("play");
+      }, 120);
+
+      descEl.classList.add("show");
+
+      setTimeout(() => {
+        lineEl.classList.remove("play");
+      }, 1500);
     }
 
-    function zodiacForDate(date = new Date()) {
-      const m = date.getMonth() + 1;
-      const d = date.getDate();
+    function scheduleNext() {
+      if (rotateTimeout) clearTimeout(rotateTimeout);
+      if (news.length <= 1) return;
 
-      const zodiacs = [
-        { start: [3, 21], end: [4, 19], symbol: '♈', name: 'Ariete' },
-        { start: [4, 20], end: [5, 20], symbol: '♉', name: 'Toro' },
-        { start: [5, 21], end: [6, 20], symbol: '♊', name: 'Gemelli' },
-        { start: [6, 21], end: [7, 22], symbol: '♋', name: 'Cancro' },
-        { start: [7, 23], end: [8, 22], symbol: '♌', name: 'Leone' },
-        { start: [8, 23], end: [9, 22], symbol: '♍', name: 'Vergine' },
-        { start: [9, 23], end: [10, 22], symbol: '♎', name: 'Bilancia' },
-        { start: [10, 23], end: [11, 21], symbol: '♏', name: 'Scorpione' },
-        { start: [11, 22], end: [12, 21], symbol: '♐', name: 'Sagittario' },
-        { start: [12, 22], end: [1, 19], symbol: '♑', name: 'Capricorno' },
-        { start: [1, 20], end: [2, 18], symbol: '♒', name: 'Acquario' },
-        { start: [2, 19], end: [3, 20], symbol: '♓', name: 'Pesci' }
-      ];
+      const delay = calcTime(news[current].description || "");
+      rotateTimeout = setTimeout(next, delay);
+    }
 
-      for (const z of zodiacs) {
-        const [sm, sd] = z.start;
-        const [em, ed] = z.end;
+    function render(immediate = false) {
+      const titleEl = document.getElementById("title");
+      const descEl = document.getElementById("description");
 
-        if (sm <= em) {
-          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm && m < em)) return z;
-        } else {
-          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm || m < em)) return z;
+      resetAnim();
+
+      setTimeout(() => {
+        titleEl.textContent = news[current]?.title || "";
+        descEl.innerHTML = news[current]?.description || "";
+        playAnim();
+        scheduleNext();
+      }, immediate ? 0 : 70);
+    }
+
+    function showImmediate() {
+      const cached = localStorage.getItem(CACHE_KEY);
+
+      if (cached) {
+        try {
+          news = JSON.parse(cached);
+        } catch {
+          news = fallback;
         }
+      } else {
+        news = fallback;
       }
 
-      return { symbol: '♈', name: 'Ariete' };
-    }
+      render(true);
 
-    function getWeatherIcon(code, isDay) {
-      if (code === 0) return isDay ? 'sun.svg' : 'moon.svg';
-      if ([1, 2].includes(code)) return isDay ? 'partly-cloudy.svg' : 'cloudy-night.svg';
-      if (code === 3) return 'cloudy.svg';
-      if ([45, 48].includes(code)) return 'cloud.svg';
-      if ([51, 53, 55].includes(code)) return 'light-rain.svg';
-      if ([61, 63, 65, 80, 81, 82].includes(code)) return 'rain.svg';
-      if ([71, 73, 75, 77].includes(code)) return 'snow-flake.svg';
-      if ([95].includes(code)) return 'thunder.svg';
-      if ([96, 99].includes(code)) return 'storm.svg';
-      return 'cloud.svg';
-    }
-
-    function getBackgroundKey(code, isDay, now, sunrise, sunset) {
-      const mins = now.getHours() * 60 + now.getMinutes();
-      const sunriseM = sunrise.getHours() * 60 + sunrise.getMinutes();
-      const sunsetM = sunset.getHours() * 60 + sunset.getMinutes();
-
-      if (mins >= sunriseM - 20 && mins <= sunriseM + 35) return 'alba';
-      if (mins >= sunsetM - 35 && mins <= sunsetM + 25) return 'tramonto';
-
-      if (!isDay) {
-        if (code === 0 || code === 1) return 'notteSerena';
-        return 'notteNuvolosa';
+      if (cached) {
+        hideSplash(120);
       }
-
-      if (code === 0 || code === 1) return 'sereno';
-      if (code === 2) return 'pocoNuvoloso';
-      if (code === 3) return 'nuvoloso';
-      if ([45, 48].includes(code)) return 'nebbia';
-      if ([71, 73, 75, 77, 85, 86].includes(code)) return 'neve';
-      if ([95, 96, 99].includes(code)) return 'temporale';
-      if ([51,53,55,61,63,65,80,81,82].includes(code)) return 'pioggia';
-
-      return 'pocoNuvoloso';
     }
 
-    function getConditionText(code) {
-      const map = {
-        0: 'Sereno',
-        1: 'Prevalentemente sereno',
-        2: 'Parzialmente nuvoloso',
-        3: 'Nuvoloso',
-        45: 'Nebbia',
-        48: 'Nebbia',
-        51: 'Pioggia leggera',
-        53: 'Pioggia',
-        55: 'Pioggia intensa',
-        61: 'Pioggia',
-        63: 'Pioggia',
-        65: 'Pioggia intensa',
-        71: 'Neve',
-        73: 'Neve',
-        75: 'Neve intensa',
-        77: 'Neve',
-        80: 'Rovesci',
-        81: 'Rovesci',
-        82: 'Forti rovesci',
-        95: 'Temporale',
-        96: 'Temporale',
-        99: 'Temporale forte'
-      };
-      return map[code] || 'Parzialmente nuvoloso';
-    }
-
-    function renderHours(items) {
-      const grid = document.getElementById('hoursGrid');
-      grid.innerHTML = '';
-
-      items.forEach((item, index) => {
-        const col = document.createElement('div');
-        col.className = 'hour-col';
-        col.innerHTML = `
-          <div class="hour-label">${index === 0 ? 'Adesso' : item.label}</div>
-          <div class="hour-icon"><img src="./icons/${item.icon}" alt=""></div>
-          <div class="hour-temp">${item.temp}°</div>
-          <div class="hour-wind">${item.wind} km/h</div>
-        `;
-        grid.appendChild(col);
-      });
-    }
-
-    function renderDays(items) {
-      const grid = document.getElementById('daysGrid');
-      grid.innerHTML = `
-        <div class="days-head left-empty">.</div>
-        <div class="days-head icon-empty">.</div>
-        <div class="days-head">Min</div>
-        <div class="days-head">Max</div>
-        <div class="days-head">Vento</div>
-      `;
-
-      items.forEach(item => {
-        grid.insertAdjacentHTML('beforeend', `
-          <div class="day-cell day-name">${item.day}</div>
-          <div class="day-cell day-icon"><img src="./icons/${item.icon}" alt=""></div>
-          <div class="day-cell">${item.min}°</div>
-          <div class="day-cell">${item.max}°</div>
-          <div class="day-cell">${item.wind} km/h</div>
-        `);
-      });
-    }
-
-    async function init() {
+    async function loadNews() {
       try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${BRESCIA.lat}&longitude=${BRESCIA.lon}&timezone=${encodeURIComponent(BRESCIA.tz)}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,wind_speed_10m_max`;
-
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Errore meteo');
-
+        const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
         const data = await res.json();
 
-        const now = new Date();
-        const sunrise = new Date(data.daily.sunrise[0]);
-        const sunset = new Date(data.daily.sunset[0]);
-
-        document.getElementById('currentCondition').textContent = getConditionText(data.current.weather_code);
-        document.getElementById('dateLine').textContent = formatDateItalian(now);
-        document.getElementById('currentTemp').textContent = `${Math.round(data.current.temperature_2m)}°`;
-        document.getElementById('minMaxLine').textContent =
-          `Min ${Math.round(data.daily.temperature_2m_min[0])}° · Max ${Math.round(data.daily.temperature_2m_max[0])}°`;
-
-        document.getElementById('feelsLikeLine').textContent =
-          `Temperatura percepita ${Math.round(data.current.apparent_temperature)}°`;
-
-        document.getElementById('humidityLine').textContent =
-          `Umidità ${Math.round(data.current.relative_humidity_2m)}%`;
-
-        document.getElementById('sunriseLine').textContent =
-          `Alba ${pad(sunrise.getHours())}:${pad(sunrise.getMinutes())}`;
-
-        document.getElementById('sunsetLine').textContent =
-          `Tramonto ${pad(sunset.getHours())}:${pad(sunset.getMinutes())}`;
-
-        document.getElementById('moonLine').textContent = moonPhaseName(now);
-
-        const zodiac = zodiacForDate(now);
-        document.getElementById('zodiacSymbol').textContent = zodiac.symbol;
-        document.getElementById('zodiacName').textContent = zodiac.name;
-
-        document.getElementById('airLine').textContent = 'Aria: Buona';
-
-        const bgKey = getBackgroundKey(
-          data.current.weather_code,
-          data.current.is_day === 1,
-          now,
-          sunrise,
-          sunset
-        );
-        document.getElementById('bg').style.backgroundImage = `url('${backgrounds[bgKey]}')`;
-
-        const times = data.hourly.time.map(t => new Date(t));
-        let startIdx = times.findIndex(t => t.getHours() === now.getHours() && t.getDate() === now.getDate());
-        if (startIdx < 0) startIdx = 0;
-
-        const hourlyItems = [];
-        for (let i = 0; i < 5; i++) {
-          const idx = Math.min(startIdx + i, times.length - 1);
-          const t = times[idx];
-          const isDayForHour = t >= sunrise && t < sunset;
-
-          hourlyItems.push({
-            label: formatHour(t),
-            icon: getWeatherIcon(data.hourly.weather_code[idx], isDayForHour),
-            temp: Math.round(data.hourly.temperature_2m[idx]),
-            wind: Math.round(data.hourly.wind_speed_10m[idx])
-          });
+        if (Array.isArray(data) && data.length) {
+          news = data;
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+          current = 0;
+          render(true);
+          hideSplash(120);
+        } else {
+          hideSplash(180);
         }
-        renderHours(hourlyItems);
-
-        const dailyItems = [];
-        for (let i = 0; i < 5; i++) {
-          dailyItems.push({
-            day: weekdayName(data.daily.time[i]),
-            icon: getWeatherIcon(data.daily.weather_code[i], true),
-            min: Math.round(data.daily.temperature_2m_min[i]),
-            max: Math.round(data.daily.temperature_2m_max[i]),
-            wind: Math.round(data.daily.wind_speed_10m_max[i])
-          });
-        }
-        renderDays(dailyItems);
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById('currentCondition').textContent = 'Meteo non disponibile';
+      } catch (e) {
+        hideSplash(180);
       }
     }
 
-    init();
-    setInterval(init, 10 * 60 * 1000);
+    function next() {
+      if (news.length <= 1) return;
+      current = (current + 1) % news.length;
+      render(false);
+    }
+
+    formatDateTime();
+    setInterval(formatDateTime, 1000);
+
+    showImmediate();
+    loadNews();
+    setInterval(loadNews, 60000);
   </script>
 </body>
 </html>
