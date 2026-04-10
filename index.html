@@ -229,29 +229,13 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.10);
     }
 
-    .left-item.zodiac {
-      grid-template-columns: 36px auto;
-    }
-
-    .zodiac-symbol {
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      line-height: 1;
-      color: rgba(255,255,255,0.92);
-      transform: translateY(1px);
-    }
-
     /* RIGHT */
     .right {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       gap: 2.2vh;
-      padding-top: 16vh;
+      padding-top: 12vh;
       padding-bottom: 2.8vh;
       padding-right: 1.8vw;
     }
@@ -290,8 +274,14 @@
       padding: 2.2vh 1.2vw 2vh;
     }
 
-    /* HOURS */
-    .hours-grid {
+    .moon-card {
+      padding: 2vh 1.2vw 1.9vh;
+    }
+
+    /* GENERIC 5 COL */
+    .hours-grid,
+    .days-grid,
+    .moon-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       align-items: start;
@@ -300,7 +290,9 @@
       column-gap: 0;
     }
 
-    .hour-col {
+    .hour-col,
+    .day-col,
+    .moon-col {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -310,7 +302,9 @@
       padding: 0 0.2vw;
     }
 
-    .hour-col + .hour-col::before {
+    .hour-col + .hour-col::before,
+    .day-col + .day-col::before,
+    .moon-col + .moon-col::before {
       content: "";
       position: absolute;
       left: 0;
@@ -320,23 +314,39 @@
       background: rgba(255,255,255,0.18);
     }
 
-    .hour-label {
+    .hour-label,
+    .day-label,
+    .moon-label {
       min-height: 1.4em;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1vh;
-      font-size: clamp(18px, 1.2vw, 27px);
       color: rgba(255,255,255,0.95);
       text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      text-transform: capitalize;
+    }
+
+    .hour-label {
+      font-size: clamp(18px, 1.2vw, 27px);
+    }
+
+    .day-label,
+    .moon-label {
+      font-size: clamp(20px, 1.35vw, 26px);
+    }
+
+    .hour-icon,
+    .day-icon,
+    .moon-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hour-icon {
       width: 46px;
       height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .hour-icon img {
@@ -368,54 +378,9 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
 
-    /* DAYS */
-    .days-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: start;
-      justify-items: center;
-      text-align: center;
-      column-gap: 0;
-    }
-
-    .day-col {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      position: relative;
-      padding: 0 0.2vw;
-    }
-
-    .day-col + .day-col::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 2.8vh;
-      bottom: 0.7vh;
-      width: 1px;
-      background: rgba(255,255,255,0.18);
-    }
-
-    .day-label {
-      min-height: 1.4em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1vh;
-      font-size: clamp(20px, 1.35vw, 26px);
-      color: rgba(255,255,255,0.95);
-      text-transform: capitalize;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    }
-
     .day-icon {
       width: 46px;
       height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .day-icon img {
@@ -444,6 +409,96 @@
       min-height: 1.1em;
       white-space: nowrap;
       text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    /* MOON */
+    .moon-icon {
+      width: 86px;
+      height: 86px;
+      position: relative;
+      margin-top: 0.2vh;
+      animation: moonFloat 7s ease-in-out infinite;
+      filter: drop-shadow(0 0 14px rgba(255,255,255,0.18));
+    }
+
+    @keyframes moonFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-2px) scale(1.02); }
+    }
+
+    .moon-disc {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #000;
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.12);
+    }
+
+    .moon-disc img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .moon-shadow {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.92);
+      transform: translateX(0%);
+      transition: transform 0.8s ease;
+    }
+
+    .moon-value {
+      margin-top: 0.9vh;
+      font-size: clamp(18px, 1.15vw, 22px);
+      line-height: 1.2;
+      color: rgba(255,255,255,0.96);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      min-height: 2.4em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.2vw;
+    }
+
+    .moon-value.big {
+      font-size: clamp(24px, 1.65vw, 30px);
+      font-family: 'GothamBold', 'Gotham', Arial, sans-serif;
+      min-height: 1.4em;
+    }
+
+    .moon-value.small {
+      font-size: clamp(16px, 1vw, 19px);
+      color: rgba(255,255,255,0.82);
+      min-height: 1.3em;
+    }
+
+    .zodiac-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55vh;
+      margin-top: 0.3vh;
+    }
+
+    .zodiac-wrap img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+
+    .zodiac-wrap .moon-value {
+      margin-top: 0;
+      min-height: unset;
     }
   </style>
 </head>
@@ -493,16 +548,6 @@
               <img src="./icons/sunset.svg" alt="">
               <span id="sunsetLine">Tramonto --:--</span>
             </div>
-
-            <div class="left-item">
-              <img src="./icons/moon.svg" alt="">
-              <span id="moonLine">Fase lunare</span>
-            </div>
-
-            <div class="left-item zodiac">
-              <span class="zodiac-symbol" id="zodiacSymbol">♈</span>
-              <span id="zodiacName">Ariete</span>
-            </div>
           </div>
         </div>
       </section>
@@ -514,6 +559,10 @@
 
         <div class="card days-card">
           <div class="days-grid" id="daysGrid"></div>
+        </div>
+
+        <div class="card moon-card">
+          <div class="moon-grid" id="moonGrid"></div>
         </div>
       </section>
     </div>
@@ -540,6 +589,21 @@
       neve: './images/neve.jpg'
     };
 
+    const zodiacAssets = {
+      Aries: './zodiac/zodiac-aries.svg',
+      Taurus: './zodiac/zodiac-taurus.svg',
+      Gemini: './zodiac/zodiac-gemini.svg',
+      Cancer: './zodiac/zodiac-cancer.svg',
+      Leo: './zodiac/zodiac-leo.svg',
+      Virgo: './zodiac/zodiac-virgo.svg',
+      Libra: './zodiac/zodiac-libra.svg',
+      Scorpio: './zodiac/zodiac-scorpio.svg',
+      Sagittarius: './zodiac/zodiac-sagittarius.svg',
+      Capricorn: './zodiac/zodiac-capricorn.svg',
+      Aquarius: './zodiac/zodiac-aquarius.svg',
+      Pisces: './zodiac/zodiac-pisces.svg'
+    };
+
     function pad(num) {
       return String(num).padStart(2, '0');
     }
@@ -558,58 +622,6 @@
       const giorni = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
       const d = new Date(dateString + 'T12:00:00');
       return giorni[d.getDay()];
-    }
-
-    function moonPhaseName(date = new Date()) {
-      const synodicMonth = 29.53058867;
-      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
-      const days = (date.getTime() - knownNewMoon) / 86400000;
-      const phase = ((days % synodicMonth) + synodicMonth) % synodicMonth;
-      const index = Math.floor((phase / synodicMonth) * 8) % 8;
-
-      return [
-        'Luna nuova',
-        'Luna crescente',
-        'Primo quarto',
-        'Gibbosa crescente',
-        'Luna piena',
-        'Gibbosa calante',
-        'Ultimo quarto',
-        'Luna calante'
-      ][index];
-    }
-
-    function zodiacForDate(date = new Date()) {
-      const m = date.getMonth() + 1;
-      const d = date.getDate();
-
-      const zodiacs = [
-        { start: [3, 21], end: [4, 19], symbol: '♈', name: 'Ariete' },
-        { start: [4, 20], end: [5, 20], symbol: '♉', name: 'Toro' },
-        { start: [5, 21], end: [6, 20], symbol: '♊', name: 'Gemelli' },
-        { start: [6, 21], end: [7, 22], symbol: '♋', name: 'Cancro' },
-        { start: [7, 23], end: [8, 22], symbol: '♌', name: 'Leone' },
-        { start: [8, 23], end: [9, 22], symbol: '♍', name: 'Vergine' },
-        { start: [9, 23], end: [10, 22], symbol: '♎', name: 'Bilancia' },
-        { start: [10, 23], end: [11, 21], symbol: '♏', name: 'Scorpione' },
-        { start: [11, 22], end: [12, 21], symbol: '♐', name: 'Sagittario' },
-        { start: [12, 22], end: [1, 19], symbol: '♑', name: 'Capricorno' },
-        { start: [1, 20], end: [2, 18], symbol: '♒', name: 'Acquario' },
-        { start: [2, 19], end: [3, 20], symbol: '♓', name: 'Pesci' }
-      ];
-
-      for (const z of zodiacs) {
-        const [sm, sd] = z.start;
-        const [em, ed] = z.end;
-
-        if (sm <= em) {
-          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm && m < em)) return z;
-        } else {
-          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm || m < em)) return z;
-        }
-      }
-
-      return { symbol: '♈', name: 'Ariete' };
     }
 
     function getWeatherIcon(code, isDay) {
@@ -729,6 +741,71 @@
       overlay.style.opacity = overlayOpacity;
     }
 
+    function getMoonData(date = new Date()) {
+      const synodicMonth = 29.53058867;
+      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
+      const daysSince = (date.getTime() - knownNewMoon) / 86400000;
+      const age = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
+      const phase = age / synodicMonth;
+      const illumination = ((1 - Math.cos(2 * Math.PI * phase)) / 2) * 100;
+
+      let phaseName = 'Luna nuova';
+      if (phase < 0.0625) phaseName = 'Luna nuova';
+      else if (phase < 0.1875) phaseName = 'Luna crescente';
+      else if (phase < 0.3125) phaseName = 'Primo quarto';
+      else if (phase < 0.4375) phaseName = 'Gibbosa crescente';
+      else if (phase < 0.5625) phaseName = 'Luna piena';
+      else if (phase < 0.6875) phaseName = 'Gibbosa calante';
+      else if (phase < 0.8125) phaseName = 'Ultimo quarto';
+      else if (phase < 0.9375) phaseName = 'Luna calante';
+      else phaseName = 'Luna nuova';
+
+      const nextFullDays = phase <= 0.5
+        ? (0.5 - phase) * synodicMonth
+        : (1.5 - phase) * synodicMonth;
+
+      const waxing = phase < 0.5;
+      const offset = illumination * (waxing ? -1 : 1);
+
+      return {
+        illumination: Math.round(illumination),
+        phaseName,
+        nextFullDays: Math.max(0, Math.round(nextFullDays)),
+        shadowOffset: `${offset.toFixed(1)}%`
+      };
+    }
+
+    function zodiacForDate(date = new Date()) {
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+
+      const zodiacs = [
+        { start: [3, 21], end: [4, 19], name: 'Aries' },
+        { start: [4, 20], end: [5, 20], name: 'Taurus' },
+        { start: [5, 21], end: [6, 20], name: 'Gemini' },
+        { start: [6, 21], end: [7, 22], name: 'Cancer' },
+        { start: [7, 23], end: [8, 22], name: 'Leo' },
+        { start: [8, 23], end: [9, 22], name: 'Virgo' },
+        { start: [9, 23], end: [10, 22], name: 'Libra' },
+        { start: [10, 23], end: [11, 21], name: 'Scorpio' },
+        { start: [11, 22], end: [12, 21], name: 'Sagittarius' },
+        { start: [12, 22], end: [1, 19], name: 'Capricorn' },
+        { start: [1, 20], end: [2, 18], name: 'Aquarius' },
+        { start: [2, 19], end: [3, 20], name: 'Pisces' }
+      ];
+
+      for (const z of zodiacs) {
+        const [sm, sd] = z.start;
+        const [em, ed] = z.end;
+        if (sm <= em) {
+          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm && m < em)) return z;
+        } else {
+          if ((m === sm && d >= sd) || (m === em && d <= ed) || (m > sm || m < em)) return z;
+        }
+      }
+      return { name: 'Aries' };
+    }
+
     function renderHours(items) {
       const grid = document.getElementById('hoursGrid');
       grid.innerHTML = '';
@@ -767,6 +844,47 @@
         `;
         grid.appendChild(col);
       }
+    }
+
+    function renderMoonCard(date = new Date()) {
+      const moon = getMoonData(date);
+      const zodiac = zodiacForDate(date);
+
+      const grid = document.getElementById('moonGrid');
+      grid.innerHTML = `
+        <div class="moon-col">
+          <div class="moon-label">Luna</div>
+          <div class="moon-icon">
+            <div class="moon-disc">
+              <img src="./images/moon.jpg" alt="Moon">
+              <div class="moon-shadow" style="transform: translateX(${moon.shadowOffset});"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="moon-col">
+          <div class="moon-label">Fase</div>
+          <div class="moon-value">${moon.phaseName}</div>
+        </div>
+
+        <div class="moon-col">
+          <div class="moon-label">Illuminazione</div>
+          <div class="moon-value big">${moon.illumination}%</div>
+        </div>
+
+        <div class="moon-col">
+          <div class="moon-label">Prossima piena</div>
+          <div class="moon-value big">${moon.nextFullDays} gg</div>
+        </div>
+
+        <div class="moon-col">
+          <div class="moon-label">Zodiac</div>
+          <div class="zodiac-wrap">
+            <img src="${zodiacAssets[zodiac.name]}" alt="${zodiac.name}">
+            <div class="moon-value small">${zodiac.name}</div>
+          </div>
+        </div>
+      `;
     }
 
     async function init() {
@@ -816,12 +934,6 @@
         document.getElementById('sunsetLine').textContent =
           `Tramonto ${pad(sunset.getHours())}:${pad(sunset.getMinutes())}`;
 
-        document.getElementById('moonLine').textContent = moonPhaseName(now);
-
-        const zodiac = zodiacForDate(now);
-        document.getElementById('zodiacSymbol').textContent = zodiac.symbol;
-        document.getElementById('zodiacName').textContent = zodiac.name;
-
         const aqi = airData?.current?.european_aqi;
         document.getElementById('airLine').textContent = getAirText(aqi);
 
@@ -864,6 +976,7 @@
 
         renderHours(hourlyItems);
         renderDays(data);
+        renderMoonCard(now);
 
         document.getElementById('app').classList.add('ready');
 
