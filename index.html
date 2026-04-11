@@ -176,10 +176,10 @@
     }
 
     .bottom-meta {
-      margin-top: 8.2vh;
+      margin-top: 8.8vh;
       display: flex;
       flex-direction: column;
-      gap: 1.45vh;
+      gap: 1.7vh;
       align-items: flex-start;
     }
 
@@ -208,6 +208,59 @@
     .zodiac-line img {
       width: 30px;
       height: 30px;
+    }
+
+    .moon-dynamic-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 0.25vh;
+    }
+
+    .moon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 12px rgba(255,255,255,0.06),
+        inset 0 0 0 1px rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .moon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: url('./images/moon.jpg') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      filter: contrast(1.08) brightness(1.02);
+      box-shadow:
+        0 0 14px rgba(255,255,255,0.10),
+        0 0 28px rgba(255,255,255,0.05);
+    }
+
+    .moon-shadow {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      border-radius: 50%;
+      transition: left 0.8s ease, width 0.8s ease;
+      pointer-events: none;
+    }
+
+    .moon-phase-text {
+      font-family: 'GothamXLight', Arial, sans-serif;
+      font-size: clamp(28px, 1.85vw, 38px);
+      line-height: 1.08;
+      color: rgba(255,255,255,0.94);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
 
     /* RIGHT */
@@ -320,9 +373,9 @@
     }
 
     .hour-icon.big-now {
-      width: 82px;
-      height: 82px;
-      margin-top: 0.2vh;
+      width: 96px;
+      height: 96px;
+      margin-top: 0.25vh;
     }
 
     .hour-icon img {
@@ -335,8 +388,8 @@
     }
 
     .hour-icon.big-now img {
-      width: 82px;
-      height: 82px;
+      width: 96px;
+      height: 96px;
     }
 
     .hour-temp {
@@ -400,11 +453,6 @@
         </div>
 
         <div class="bottom-meta">
-          <div class="bottom-line" id="moonPhaseLine">
-            <img src="./icons/moon.svg" alt="">
-            <span>Ultimo quarto</span>
-          </div>
-
           <div class="bottom-line" id="sunInfoLine">
             <img id="sunInfoIcon" src="./icons/sunset.svg" alt="">
             <span id="sunInfoText">Tramonto 19:59</span>
@@ -413,6 +461,15 @@
           <div class="zodiac-line">
             <img id="zodiacIcon" src="./zodiac/zodiac-aries.svg" alt="Aries">
             <span id="zodiacName">Aries</span>
+          </div>
+
+          <div class="moon-dynamic-row">
+            <div class="moon-wrap">
+              <div class="moon">
+                <div class="moon-shadow" id="moonShadow"></div>
+              </div>
+            </div>
+            <div class="moon-phase-text" id="moonPhaseText">Ultimo quarto</div>
           </div>
         </div>
       </section>
@@ -592,26 +649,44 @@
       const phase = age / synodicMonth;
 
       let phaseName = 'Luna nuova';
+      let shadowLeft = 0;
+      let shadowWidth = 100;
 
       if (phase < 0.0625 || phase >= 0.9375) {
         phaseName = 'Luna nuova';
+        shadowLeft = 0;
+        shadowWidth = 100;
       } else if (phase < 0.1875) {
         phaseName = 'Mezzaluna crescente';
+        shadowLeft = 16;
+        shadowWidth = 100;
       } else if (phase < 0.3125) {
         phaseName = 'Primo quarto';
+        shadowLeft = 50;
+        shadowWidth = 100;
       } else if (phase < 0.4375) {
         phaseName = 'Luna crescente';
+        shadowLeft = 78;
+        shadowWidth = 100;
       } else if (phase < 0.5625) {
         phaseName = 'Luna piena';
+        shadowLeft = 100;
+        shadowWidth = 100;
       } else if (phase < 0.6875) {
         phaseName = 'Luna calante';
+        shadowLeft = -78;
+        shadowWidth = 100;
       } else if (phase < 0.8125) {
         phaseName = 'Ultimo quarto';
+        shadowLeft = -50;
+        shadowWidth = 100;
       } else {
         phaseName = 'Mezzaluna calante';
+        shadowLeft = -16;
+        shadowWidth = 100;
       }
 
-      return { phaseName };
+      return { phaseName, shadowLeft, shadowWidth };
     }
 
     function zodiacForDate(date = new Date()) {
@@ -649,7 +724,10 @@
       const moon = getMoonInfo(new Date());
       const zodiac = zodiacForDate(new Date());
 
-      document.querySelector('#moonPhaseLine span').textContent = moon.phaseName;
+      document.getElementById('moonPhaseText').textContent = moon.phaseName;
+      document.getElementById('moonShadow').style.left = `${moon.shadowLeft}%`;
+      document.getElementById('moonShadow').style.width = `${moon.shadowWidth}%`;
+
       document.getElementById('zodiacIcon').src = zodiacAssets[zodiac.name];
       document.getElementById('zodiacName').textContent = zodiac.name;
 
