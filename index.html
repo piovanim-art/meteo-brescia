@@ -181,7 +181,7 @@
       margin-top: 7.6vh;
       display: flex;
       flex-direction: column;
-      gap: 1.45vh;
+      gap: 1.35vh;
       align-items: flex-start;
     }
 
@@ -206,20 +206,19 @@
       flex-shrink: 0;
     }
 
-    /* Solo UV e Aria colorati */
     .bottom-line.uv.good img,
     .bottom-line.air.good img {
-      filter: brightness(0) saturate(100%) invert(67%) sepia(71%) saturate(435%) hue-rotate(76deg) brightness(95%) contrast(92%);
+      filter: brightness(0) saturate(100%) invert(66%) sepia(43%) saturate(925%) hue-rotate(78deg) brightness(94%) contrast(91%);
     }
 
     .bottom-line.uv.medium img,
     .bottom-line.air.medium img {
-      filter: brightness(0) saturate(100%) invert(83%) sepia(73%) saturate(731%) hue-rotate(346deg) brightness(102%) contrast(94%);
+      filter: brightness(0) saturate(100%) invert(82%) sepia(67%) saturate(870%) hue-rotate(356deg) brightness(101%) contrast(95%);
     }
 
     .bottom-line.uv.bad img,
     .bottom-line.air.bad img {
-      filter: brightness(0) saturate(100%) invert(34%) sepia(100%) saturate(1430%) hue-rotate(341deg) brightness(102%) contrast(95%);
+      filter: brightness(0) saturate(100%) invert(34%) sepia(92%) saturate(1612%) hue-rotate(343deg) brightness(102%) contrast(96%);
     }
 
     /* RIGHT */
@@ -878,8 +877,8 @@
     }
 
     function classifyAir(aqi) {
-      if (aqi <= 40) return 'good';
-      if (aqi <= 80) return 'medium';
+      if (aqi <= 20) return 'good';
+      if (aqi <= 60) return 'medium';
       return 'bad';
     }
 
