@@ -626,6 +626,7 @@
       sereno: './images/sole-sereno.jpg',
       pocoNuvoloso: './images/poco-nuvoloso.jpg',
       nuvoloso: './images/nuvoloso.jpg',
+      moltoNuvoloso: './images/molto-nuvoloso.jpg',
       pioggia: './images/pioggia.jpg',
       temporale: './images/temporale.jpg',
       notteSerena: './images/notte-serena.jpg',
@@ -698,7 +699,7 @@
 
       if (code === 0 || code === 1) return 'sereno';
       if (code === 2) return 'pocoNuvoloso';
-      if (code === 3) return 'nuvoloso';
+      if (code === 3) return 'moltoNuvoloso';
       if ([45, 48].includes(code)) return 'nebbia';
       if ([71, 73, 75, 77, 85, 86].includes(code)) return 'neve';
       if ([95, 96, 99].includes(code)) return 'temporale';
@@ -763,7 +764,7 @@
       }
 
       if (bgKey === 'temporale' || bgKey === 'pioggia') brightness -= 0.08;
-      if (bgKey === 'nebbia') brightness += 0.04;
+      if (bgKey === 'nebbia' || bgKey === 'moltoNuvoloso') brightness -= 0.03;
 
       bg.style.filter = `brightness(${brightness}) saturate(${saturate})`;
     }
@@ -784,25 +785,25 @@
         phaseName = 'Luna Nuova';
         shadowLeft = 0;
       } else if (age < 5.53699) {
-        phaseName = 'Mezzaluna crescente';
+        phaseName = 'Mezzaluna Crescente';
         shadowLeft = 20;
       } else if (age < 9.22831) {
         phaseName = 'Primo Quarto';
         shadowLeft = 50;
       } else if (age < 12.91963) {
-        phaseName = 'Luna crescente';
+        phaseName = 'Luna Crescente';
         shadowLeft = 75;
       } else if (age < 16.61096) {
         phaseName = 'Luna Piena';
         shadowLeft = 100;
       } else if (age < 20.30228) {
-        phaseName = 'Luna calante';
+        phaseName = 'Luna Calante';
         shadowLeft = -75;
       } else if (age < 23.99361) {
         phaseName = 'Ultimo Quarto';
         shadowLeft = -50;
       } else if (age < 27.68493) {
-        phaseName = 'Mezzaluna calante';
+        phaseName = 'Mezzaluna Calante';
         shadowLeft = -20;
       } else {
         phaseName = 'Luna Nuova';
